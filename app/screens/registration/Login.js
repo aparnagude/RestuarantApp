@@ -27,9 +27,14 @@ class Login extends Component {
         this.props.navigation.navigate('Home');
     }
 
-    gotoScreen(screen){
+    async   gotoScreen(screen){
         if(screen=='SignUp'){
             this.props.navigation.navigate('SignUp');
+        }
+        if(screen=='Home'){
+            await AsyncStorage.setItem('userToken', 'myToken');
+
+            this.props.navigation.navigate('Home');
         }
 
     }
@@ -73,7 +78,7 @@ class Login extends Component {
           
         />
           
-           <TouchableOpacity style={baseStyle.SignUpButton}>
+           <TouchableOpacity style={baseStyle.SignUpButton} onPress={()=>this.gotoScreen('Home')}>
                <Text style={baseStyle.buttonText}>LOGIN</Text>
            </TouchableOpacity>
           

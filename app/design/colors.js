@@ -6,7 +6,8 @@ const color={
     textlight:'#A8A3A4',
     fbcolor:'#3b5998',
     gcolor:'#d34836',
-    linecolor:'#C1B9BA'
+    linecolor:'#C1B9BA',
+    primary:'#566573'
 }
 
 export default color;

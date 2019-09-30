@@ -1,5 +1,7 @@
-import {createAppContainer,createSwitchNavigator} from 'react-navigation';
+import {createAppContainer,createSwitchNavigator,DrawerActions } from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
+ import { createDrawerNavigator } from 'react-navigation-drawer';
+import {View,Text,StyleSheet,Platform,TouchableOpacity,Image,StatusBar} from 'react-native';
 import Login from '../screens/registration/Login';
 import Home from '../screens/afterLogin/Home';
 import Loading from '../screens/registration/Loading';
@@ -7,19 +9,100 @@ import IntialScreen from '../screens/registration/IntialScreen';
 import SignUp from '../screens/registration/SignUp';
 import color from '../design/colors';
 import string from '../design/strings';
-import React from 'react';
 import Icon from 'react-native-vector-icons/AntDesign'
+import Profile from '../screens/afterLogin/Profile';
+import SideMenu from '../screens/afterLogin/SideMenu/SideMenu';
+import React, {Component} from 'react';
 
 
 
 
 
+class NavigationDrawerStructure extends Component {
+  //Structure for the navigatin Drawer
+  toggleDrawer = () => {
+    //Props to open/close the drawer
+    this.props.navigationProps.toggleDrawer();
+  };
+  render() {
+    return (
+      <View style={{ flexDirection: 'row' }}>
+        <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
+          {/*Donute Button Image */}
+          <Icon name='menu-unfold' size={25} />
+        </TouchableOpacity>
+      </View>
+    );
+  }
+}
 
-const AppStack = createStackNavigator({    
-     Home:{
-         screen: Home
-        },
+
+
+const FirstActivity_StackNavigator = createStackNavigator({
+  //All the screen from the Screen1 will be indexed here
+  Home: {
+    screen: Home,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Demo Screen 1',
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerStyle: {
+        backgroundColor: '#FF9800',
+      },
+      headerTintColor: '#fff',
+    }),
+  },
+  Profile:{
+    screen:Profile
+  }
 });
+
+
+
+const DrawerNavigatorExample = createDrawerNavigator({
+  //Drawer Optons and indexing
+  Home: {
+    //Title
+    screen: FirstActivity_StackNavigator,
+    navigationOptions: {
+      drawerLabel: 'Demo Screen 1',
+    },
+  },
+  
+  Profile:{
+    screen:Profile
+  }
+},
+{
+    initialRouteName: 'Home',
+    contentComponent: SideMenu,
+    drawerWidth: 300
+  }
+  );
+
+
+
+// const DrawerNavigator = createDrawerNavigator({
+//   Home:{
+//       screen: Home
+//   },
+//   Profile:{
+//     screen:Profile
+//   }
+// },{
+//   initialRouteName: 'Home',
+//   contentComponent: SideMenu,
+//   drawerWidth: 300
+// });
+
+
+
+
+
+
+
+
+
+
 const AuthStack = createStackNavigator({ 
     
     IntialScreen: {
@@ -117,8 +200,9 @@ const AuthStack = createStackNavigator({
 const Router = createAppContainer(createSwitchNavigator(
     {
         Loading:{screen: Loading},
-        App: AppStack, 
-        Auth: AuthStack
+        App: DrawerNavigatorExample, 
+        Auth: AuthStack,
+        
     }, 
     {
         initialRouteName: 'Loading'
