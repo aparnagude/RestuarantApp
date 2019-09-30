@@ -4,25 +4,45 @@ import {NavigationActions} from 'react-navigation';
 import {ScrollView, Text, View,StyleSheet,TouchableOpacity,Image,Platform,ImageBackground} from 'react-native';
 import { DrawerActions } from 'react-navigation-drawer';
 import Icon from 'react-native-vector-icons/EvilIcons';
+import Icon2 from 'react-native-vector-icons/AntDesign';
+import Icon3 from 'react-native-vector-icons/Entypo'
 import string from '../../../design/strings';
 import color from '../../../design/colors';
+import AsyncStorage from '@react-native-community/async-storage';
 import window, { heights, widths } from '../../../design/dimen';
 import baseStyle from '../../../design/styles';
+
 class SideMenu extends Component {
   navigateToScreen = (route) => () => {
     const navigateAction = NavigationActions.navigate({
       routeName: route
     });
-    this.props.navigation.dispatch(navigateAction);
-    this.props.navigation.dispatch(DrawerActions.closeDrawer())
+    console.warn(route);
+    if(route=='Logout'){
+this._bootstrap();
+    }
+    else{
+      this.props.navigation.dispatch(navigateAction);
+      this.props.navigation.dispatch(DrawerActions.closeDrawer())
+    }
+    
   }
+  _bootstrap = async () => {
+     
 
+    await AsyncStorage.clear();
+    this.props.navigation.navigate('Login');
+}
   render () {
     return (
         <View style={styles.container}>
         <ImageBackground style={styles.Background} source={require('../../../assets/main_background.jpg')}>
-        {/* <Image source={require('../../../assets/main_background.jpg')} resizeMode='cover' style={baseStyle.ImageBackground}></Image> */}
             <View style={styles.overlay} /> 
+            <TouchableOpacity style={{alignSelf:'flex-end',marginRight:10,marginTop:-20}}
+            onPress={()=>this.props.navigation.dispatch(DrawerActions.closeDrawer())}>
+            <Icon3  name='cross' size={30} />
+
+            </TouchableOpacity>
 <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
 <Image source={require("../../../assets/noPhoto.png")}
                   style={styles.avatar} /> 
@@ -45,19 +65,17 @@ class SideMenu extends Component {
         <View style={styles.menuOptions}>
             <TouchableOpacity style={styles.menuItem} onPress={this.navigateToScreen('home')}>
                 <View style={styles.menuItemIcon}>
-                    <Image  source={require('../../../assets/home_icon.png')}  color={color.primary} style={{width:20,height:20,alignSelf:'center'}}/>
+                <Icon2 name="home" size={30} color={color.primary}/>
                 </View>
                 <View style={styles.menuItemTextView}>
                     <Text style={styles.menuItemText}>Home</Text>
-                    {/* <View style={{alignSelf: 'center', marginRight: 20, backgroundColor: '#600724', borderRadius: 2,}}>
-                        <Text style={{margin: 4, fontSize: 16, lineHeight: 16, textAlign: 'center', color: '#fff',}}>hello</Text>
-                    </View> */}
+                 
                 </View>
             </TouchableOpacity>
     
-            <TouchableOpacity style={styles.menuItem} onPress={() => this.navigateToScreen('profile')}>
+            <TouchableOpacity style={styles.menuItem} onPress={this.navigateToScreen('Profile')}>
             <View style={styles.menuItemIcon}>
-            <Image source={require('../../../assets/profile_icon.png')}  color={color.primary} style={{width:20,height:20,alignSelf:'center'}}/>               
+            <Icon name="user" size={35} color={color.primary}/>
              </View>
                 <View style={styles.menuItemTextView}>
                     <Text style={styles.menuItemText}>Profile</Text>
@@ -70,9 +88,9 @@ class SideMenu extends Component {
     
     
     
-            <TouchableOpacity style={styles.menuItem} onPress={() => this.navigateToScreen('about_us')}>
+            <TouchableOpacity style={styles.menuItem} onPress={this.navigateToScreen('about_us')}>
             <View style={styles.menuItemIcon}>
-                    <Icon name="cart" size={24} color={color.primary}/>
+                    <Icon name="cart" size={30} color={color.primary}/>
                 </View>
                 <View style={styles.menuItemTextView}>
                     <Text style={styles.menuItemText}>Cart</Text>
@@ -80,9 +98,9 @@ class SideMenu extends Component {
                 </View>
             </TouchableOpacity>
     
-            <TouchableOpacity style={styles.menuItem} onPress={() => this.navigateToScreen('contact_us')}>
+            <TouchableOpacity style={styles.menuItem} onPress={ this.navigateToScreen('contact_us')}>
             <View style={styles.menuItemIcon}>
-                    <Icon name="play" size={30} color={color.primary}/>
+                    <Icon name="play" size={35} color={color.primary}/>
                 </View>
                 <View style={styles.menuItemTextView}>
                     <Text style={styles.menuItemText}>Videos</Text>
@@ -92,9 +110,9 @@ class SideMenu extends Component {
     
     
             
-            <TouchableOpacity style={styles.menuItem} onPress={() => this.navigateToScreen('logout')}>
+            <TouchableOpacity style={styles.menuItem} onPress={this.navigateToScreen('Logout')}>
             <View style={styles.menuItemIcon}>
-                    <Icon name="power-off" size={24} color={color.primary}/>
+                    <Icon2 name="logout" size={24} color={color.primary}/>
                 </View>
                 <View style={styles.menuItemTextView}>
                     <Text style={styles.menuItemText}>Logout</Text>
@@ -138,10 +156,9 @@ class SideMenu extends Component {
       },
         menuItemText: {
           alignSelf: 'center',
-          fontSize: widths.dp16, 
-          lineHeight: widths.dp16,
-          color: color.primaryColor,
-          fontFamily: string.fontLatoMed,
+          fontSize: widths.dp17, 
+          color: color.primary,
+          fontFamily: string.fontLatoSemi,
       },
         header: {
           alignSelf: Platform.OS === 'ios' ? 'flex-start' : 'center',
@@ -183,7 +200,7 @@ alignSelf:'center',
           paddingRight: widths.dp16,
         },
         name: {
-          fontSize: widths.dp17,
+          fontSize: widths.dp18,
           fontFamily: string.fontLatoMed,
           textTransform: 'capitalize',
           color:color.white,
@@ -191,7 +208,7 @@ alignSelf:'center',
          
         },
         mobileNumber: {
-          fontSize: widths.dp12,
+          fontSize: widths.dp16,
           fontFamily: string.fontLatoMed,
           textAlign: 'center',
           color:color.white

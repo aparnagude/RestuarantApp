@@ -10,6 +10,7 @@ import SignUp from '../screens/registration/SignUp';
 import color from '../design/colors';
 import string from '../design/strings';
 import Icon from 'react-native-vector-icons/AntDesign'
+import Icon2 from 'react-native-vector-icons/EvilIcons';
 import Profile from '../screens/afterLogin/Profile';
 import SideMenu from '../screens/afterLogin/SideMenu/SideMenu';
 import React, {Component} from 'react';
@@ -29,7 +30,7 @@ class NavigationDrawerStructure extends Component {
       <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
           {/*Donute Button Image */}
-          <Icon name='menu-unfold' size={25} />
+          <Icon2 name='navicon' size={30}  color={color.white} style={{paddingLeft:10,alignSelf:'center'}}/>
         </TouchableOpacity>
       </View>
     );
@@ -43,10 +44,10 @@ const FirstActivity_StackNavigator = createStackNavigator({
   Home: {
     screen: Home,
     navigationOptions: ({ navigation }) => ({
-      title: 'Demo Screen 1',
+      title: 'Home',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
       headerStyle: {
-        backgroundColor: '#FF9800',
+        backgroundColor: color.primary,
       },
       headerTintColor: '#fff',
     }),
