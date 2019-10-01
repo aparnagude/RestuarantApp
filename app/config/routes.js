@@ -49,11 +49,30 @@ const FirstActivity_StackNavigator = createStackNavigator({
       headerStyle: {
         backgroundColor: color.primary,
       },
+      headerTitleStyle: {
+        fontFamily: string.fontLato,
+        letterSpacing: 0.2,
+        fontWeight: '100',
+      },
       headerTintColor: '#fff',
     }),
   },
   Profile:{
-    screen:Profile
+    screen:Profile,
+    navigationOptions: ({ navigation }) => ({
+      title: 'My Account',
+     
+      headerStyle: {
+        backgroundColor: color.primary,
+        elevation:0,
+      },
+      headerTitleStyle: {
+              fontFamily: string.fontLato,
+              letterSpacing: 0.2,
+              fontWeight: '100',
+            },
+      headerTintColor: '#fff',
+    }),
   }
 });
 
@@ -70,7 +89,8 @@ const DrawerNavigatorExample = createDrawerNavigator({
   },
   
   Profile:{
-    screen:Profile
+    screen:Profile,
+    
   }
 },
 {

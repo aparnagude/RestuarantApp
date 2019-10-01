@@ -4,8 +4,9 @@ import AsyncStorage from '@react-native-community/async-storage';
 import color from '../../design/colors';
 import string from '../../design/strings';
 import window, { heights, widths } from '../../design/dimen';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-
+import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
+import BackgroundCarousel from '../../components/BackgroundCarousel';
+import BottomBar from '../../components/BootomBar';
 
 class Home extends Component {
     constructor(props){
@@ -13,11 +14,43 @@ class Home extends Component {
         this.state={
             ItemList:[
                 {"id":"1","name":"Chicken Biriyani","image":require('../../assets/tanduri_chicken.jpg'),"price":"250"},
-                {"id":"2","name":"Chicken Biriyani","image":require('../../assets/tanduri_chicken.jpg'),"price":"250"},
-                {"id":"3","name":"Chicken Biriyani","image":require('../../assets/tanduri_chicken.jpg'),"price":"250"},
-                {"id":"4","name":"Chicken Biriyani","image":require('../../assets/tanduri_chicken.jpg'),"price":"250"},
+                {"id":"2","name":"Cooked dish on gray bowl","image":require('../../assets/main_background.jpg'),"price":"450"},
+                {"id":"3","name":"Fish Fry","image":require('../../assets/fish_fry.jpg'),"price":"250"},
+                {"id":"4","name":"Grilled steak with vegetables on white ceramic plate","image":require('../../assets/food_image2.jpg'),"price":"250"},
+                {"id":"5","name":"Cooked dish on gray bowl","image":require('../../assets/main_background.jpg'),"price":"450"},
+                {"id":"6","name":"Fish Fry","image":require('../../assets/fish_fry.jpg'),"price":"250"},
 
-            ]
+            ],
+            images:[
+              require('../../assets/fish_fry.jpg'),
+              require('../../assets/food_image.jpg'),
+              require('../../assets/main_background.jpg'),
+              require('../../assets/tanduri_chicken.jpg'),
+
+            ],
+            bottomList: [
+              {
+                id: 'veg',
+                name: 'Veg',
+                image:require('../../assets/veg.png')
+              },
+              {
+                id: 'nonVeg',
+                name: 'Non Veg',
+                image:require('../../assets/non_Veg.png')
+              },
+              {
+                id: 'starter',
+                name: 'Starters',
+                image:require('../../assets/veg.png')
+              },
+              {
+                id: 'dessert',
+                name: 'Desserts',
+                image:require('../../assets/dessert.png')
+              },
+              
+            ],
         }
     }
 
@@ -30,24 +63,32 @@ class Home extends Component {
 
     render(){
         return(
-            <View style={{flex:1,backgroundColor:color.white}}>
+            <View style={styles.container}>
                 <StatusBar backgroundColor={color.primary} barStyle="default"/>
+               <ScrollView showsVerticalScrollIndicator={false} style={{marginBottom:50}}>
+                <View style={styles.secondContainer}>
+                <View style={{backgroundColor:color.white}}>
+                <BackgroundCarousel images={this.state.images} />
 
-                <View style={{flex:1,alignItems:'center',marginVertical:10}}>
-                    <Text style={{fontFamily:string.fontLatoMed,color:color.black,fontSize:16,alignSelf:'flex-start',marginHorizontal:10,marginVertical:10}}>Popular Dishes</Text>
+                </View>
+
+
+                    <Text style={styles.headingText}>POPULAR DISHES</Text>
                 <FlatList
         data={this.state.ItemList}
         horizontal={true}
+        showsHorizontalScrollIndicator={false}
+
         renderItem={({ item }) => 
-        <View style={{backgroundColor:color.white,width:200,marginHorizontal:5,borderRadius:5,elevation:5,height:250}}>
+        <View style={styles.cardContainer}>
              <ImageBackground style={styles.Background} source={item.image}>
             <View style={styles.overlay} /> 
             </ImageBackground>
-            <View style={{flexDirection:'column',justifyContent:'space-between',marginHorizontal:10}}>
-                <Text style={{fontFamily:string.fontLatoSemi,fontSize:16,color:color.primary}}>{item.name}</Text>
-                <View style={{flexDirection:'row',justifyContent:'space-between',marginVertical:10}}>
+            <View style={styles.columnContainer}>
+                <Text style={styles.name} numberOfLines={2}>{item.name}</Text>
+                <View style={styles.rowContainer}>
                 <Text style={{fontFamily:string.fontLatoSemi,fontSize:14,color:color.primaryColor,}}>{'\u20B9'+item.price}</Text>
-               <TouchableOpacity style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5}}>
+               <TouchableOpacity style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,}}>
                    <Text style={{fontFamily:string.fontLatoSemi,fontSize:14,color:color.white,alignSelf:'center',paddingHorizontal:10}}>ADD</Text>
                </TouchableOpacity>
                 </View>
@@ -58,8 +99,44 @@ class Home extends Component {
         keyExtractor={item => item.id}
       />
 
-                </View>
 
+
+<Text style={styles.headingText}>RECOMMENDED DISHES</Text>
+                <FlatList
+        data={this.state.ItemList}
+     
+        showsHorizontalScrollIndicator={false}
+        numColumns={2}
+        renderItem={({ item }) => 
+        <View style={styles.cardContainer2}>
+             <ImageBackground style={styles.Background} source={item.image}>
+            <View style={styles.overlay} /> 
+            </ImageBackground>
+            <View style={styles.columnContainer}>
+                <Text style={styles.name} numberOfLines={2}>{item.name}</Text>
+                <View style={styles.rowContainer}>
+                <Text style={{fontFamily:string.fontLatoSemi,fontSize:14,color:color.primaryColor,}}>{'\u20B9'+item.price}</Text>
+               <TouchableOpacity style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,}}>
+                   <Text style={{fontFamily:string.fontLatoSemi,fontSize:14,color:color.white,alignSelf:'center',paddingHorizontal:10}}>ADD</Text>
+               </TouchableOpacity>
+                </View>
+                </View>
+            </View>
+       
+    }
+        keyExtractor={item => item.id}
+      />
+</View>
+
+              
+                </ScrollView>
+                <View style={styles.bottomContainer}>
+                 <BottomBar 
+                
+                onPressDetails={(key) => console.warn(key)} 
+      
+                  bottomList={this.state.bottomList}/>
+                </View>
             </View>
         );
     }
@@ -67,43 +144,77 @@ class Home extends Component {
 }
 export default Home;
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: "white" },
-    menuOptions: {
+    container: { 
       flex: 1, 
-      flexDirection: 'column', 
-      width: '100%', 
-      backgroundColor: color.white,
-      marginTop:20
-    },
-    menuItem:{
-      flexDirection: 'row', 
-      justifyContent: 'center',
-      marginLeft:10
-    },
-    menuItemIcon: {
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      width: widths.by8, 
-      height: widths.by8, 
-    },
-    menuItemTextView: {
-      flex: 1, 
-      flexDirection: 'row', 
-      justifyContent: 'space-between',
-      marginLeft:10
-  },
-    menuItemText: {
-      alignSelf: 'center',
-      fontSize: widths.dp17, 
-      color: color.primary,
-      fontFamily: string.fontLatoSemi,
-  },
+      backgroundColor: "white"
+     },
+  
+secondContainer:{
+  flex:1,
+  alignItems:'center',
+  marginVertical:10,
+  paddingBottom:20
+},
+headingText:{
+  fontFamily:string.fontLato,
+  color:color.black,
+  fontSize:18,
+  alignSelf:'flex-start',
+  marginHorizontal:10,
+marginTop:20,
+  
+},
+
+cardContainer:{
+  backgroundColor:color.white,
+  width:200,
+  marginHorizontal:5,
+  borderRadius:5,
+  elevation:5,
+  height:230,
+  marginVertical:10
+},
+cardContainer2:{
+  backgroundColor:color.white,
+  width:170,
+  marginHorizontal:5,
+  borderRadius:5,
+  elevation:5,
+  height:230,
+  marginVertical:5
+},
+columnContainer:{
+  flexDirection:'column',
+  justifyContent:'space-between',
+  marginHorizontal:10
+},
+name:{
+  fontFamily:string.fontLatoSemi,
+  fontSize:16,
+  color:color.black,
+  marginTop:10
+
+},
+rowContainer:{
+  flexDirection:'row',
+  justifyContent:'space-between',
+  marginVertical:10
+},
+bottomContainer:{
+  position:'absolute',
+  bottom:0,
+  left:0,
+  right:0,
+  backgroundColor:color.white,
+  elevation:5
+},
+
     header: {
       alignSelf: Platform.OS === 'ios' ? 'flex-start' : 'center',
       justifyContent: Platform.OS === 'ios' ? 'flex-start' : 'center',
     },
     Background: {
-        height:150,
+        height:120,
         alignItems:'center',
         justifyContent:'center',
         borderRadius:5
@@ -114,75 +225,14 @@ const styles = StyleSheet.create({
         ...StyleSheet.absoluteFillObject,
         backgroundColor: 'rgba(34,34,34,0.7)',
       },
-    avatar: {
-      alignSelf: 'center',
-      width: widths.by5,
-      height: widths.by5,
-      borderRadius: widths.by5,
-      backgroundColor:color.white,
-      marginLeft:-20,
-      marginRight:10
-    },
-    headerColumn: {
+
+  
+  
     
-alignSelf:'center',       
-},
-    profileNumbers: {
-      alignSelf: 'center',
-      flexDirection: "column",
-      paddingVertical: 10,
-      justifyContent: "center",
-      alignItems: 'center'
-    },
-    headerText: {
-      paddingLeft: widths.dp16,
-      paddingRight: widths.dp16,
-    },
-    name: {
-      fontSize: widths.dp18,
-      fontFamily: string.fontLatoMed,
-      textTransform: 'capitalize',
-      color:color.white,
-      marginLeft:10
-     
-    },
-    mobileNumber: {
-      fontSize: widths.dp16,
-      fontFamily: string.fontLatoMed,
-      textAlign: 'center',
-      color:color.white
-    },
-    bio: {
-      marginBottom: heights.dp5,
-    },
-    
-    modeBar: {
-      marginTop: 15,
-      flexDirection: "row",
-      justifyContent: "space-around",
-      alignItems: "center",
-      borderColor: color.primary,
-      borderWidth: StyleSheet.hairlineWidth
-    },
-    modeIcon: {
-      width: widths.by2,
-      alignItems: "center"
-    },
-    button: {
-      borderRadius: 3,
-      paddingTop: 7,
-      paddingBottom: 7,
-      paddingLeft: 20,
-      paddingRight: 20
-    },
-    text: {
-      fontWeight: "600",
-      textAlign: "center"
-    },
-    photoContainer: {
-      flexDirection: "row",
-      flexWrap: "wrap"
-    }
+  
+  
+ 
+   
   });
   
  
