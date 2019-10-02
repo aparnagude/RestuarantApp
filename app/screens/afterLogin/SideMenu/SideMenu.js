@@ -61,7 +61,7 @@ this._bootstrap();
              
               
         </ImageBackground>            
-    
+    <ScrollView>
         <View style={styles.menuOptions}>
             <TouchableOpacity style={styles.menuItem} onPress={this.navigateToScreen('home')}>
                 <View style={styles.menuItemIcon}>
@@ -121,6 +121,8 @@ this._bootstrap();
             </TouchableOpacity>
     
         </View>
+
+        </ScrollView>
     </View>
         );
     

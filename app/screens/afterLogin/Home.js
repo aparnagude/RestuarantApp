@@ -30,22 +30,22 @@ class Home extends Component {
             ],
             bottomList: [
               {
-                id: 'veg',
+                id: 'Veg',
                 name: 'Veg',
                 image:require('../../assets/veg.png')
               },
               {
-                id: 'nonVeg',
+                id: 'NonVeg',
                 name: 'Non Veg',
                 image:require('../../assets/non_Veg.png')
               },
               {
-                id: 'starter',
+                id: 'Starter',
                 name: 'Starters',
                 image:require('../../assets/veg.png')
               },
               {
-                id: 'dessert',
+                id: 'Dessert',
                 name: 'Desserts',
                 image:require('../../assets/dessert.png')
               },
@@ -59,6 +59,13 @@ class Home extends Component {
 
         await AsyncStorage.clear();
         this.props.navigation.navigate('Login');
+    }
+
+    navigatetoScreen (route) {
+      console.warn(route)
+    
+        this.props.navigation.navigate(route);
+      
     }
 
     render(){
@@ -133,7 +140,7 @@ class Home extends Component {
                 <View style={styles.bottomContainer}>
                  <BottomBar 
                 
-                onPressDetails={(key) => console.warn(key)} 
+                onPressDetails={(key) =>this.navigatetoScreen(key)} 
       
                   bottomList={this.state.bottomList}/>
                 </View>

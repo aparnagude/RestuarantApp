@@ -11,8 +11,11 @@ import color from '../design/colors';
 import string from '../design/strings';
 import Icon from 'react-native-vector-icons/AntDesign'
 import Icon2 from 'react-native-vector-icons/EvilIcons';
-import Profile from '../screens/afterLogin/Profile';
+import Profile from '../screens/afterLogin/Profile/Profile';
 import SideMenu from '../screens/afterLogin/SideMenu/SideMenu';
+import NonVeg from '../screens/afterLogin/nonVeg/NonVeg';
+import Filter from '../screens/afterLogin/Filter';
+import EditProfile from '../screens/afterLogin/Profile/EditProfile';
 import React, {Component} from 'react';
 
 
@@ -73,7 +76,69 @@ const FirstActivity_StackNavigator = createStackNavigator({
             },
       headerTintColor: '#fff',
     }),
-  }
+  },
+ NonVeg:{
+    screen:NonVeg,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Non Veg',
+     
+      headerStyle: {
+        backgroundColor: color.primary,
+        elevation:0,
+      },
+      headerTitleStyle: {
+              fontFamily: string.fontLato,
+              letterSpacing: 0.2,
+              fontWeight: '100',
+            },
+      headerTintColor: '#fff',
+    }),
+  },
+  Filter:{
+    screen:Filter,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Filter',
+      headerLeft: (
+        <TouchableOpacity onPress={()=>navigation.goBack(null)}  
+        style={{marginLeft:20,alignSelf:'center',marginTop:10,width:30,height:30}}>
+        <Icon 
+        name='close'
+        size={25}
+        color={color.white}
+         
+        
+        />
+        </TouchableOpacity>
+      ),
+      headerStyle: {
+        backgroundColor: color.primary,
+        elevation:0,
+      },
+      headerTitleStyle: {
+              fontFamily: string.fontLato,
+              letterSpacing: 0.2,
+              fontWeight: '100',
+            },
+      headerTintColor: '#fff',
+    }),
+  },
+  EditProfile:{
+    screen:EditProfile,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Edit Profile',
+     
+      headerStyle: {
+        backgroundColor: color.primary,
+        elevation:0,
+      },
+      headerTitleStyle: {
+              fontFamily: string.fontLato,
+              letterSpacing: 0.2,
+              fontWeight: '100',
+            },
+      headerTintColor: '#fff',
+    }),
+  },
 });
 
 
@@ -102,18 +167,6 @@ const DrawerNavigatorExample = createDrawerNavigator({
 
 
 
-// const DrawerNavigator = createDrawerNavigator({
-//   Home:{
-//       screen: Home
-//   },
-//   Profile:{
-//     screen:Profile
-//   }
-// },{
-//   initialRouteName: 'Home',
-//   contentComponent: SideMenu,
-//   drawerWidth: 300
-// });
 
 
 
@@ -140,25 +193,24 @@ const AuthStack = createStackNavigator({
 
              title: 'LOGIN',
              headerLeft: (
-                 <Icon 
+              <TouchableOpacity onPress={()=>navigation.goBack(null)}  
+              style={{marginLeft:20,alignSelf:'center',marginTop:10,width:30,height:30}}>
+              <Icon 
+                 
                  name='arrowleft'
-                 size={30}
+                 size={25}
                  color={color.white}
                   onPress={()=>navigation.goBack(null)}
-                  style={{marginLeft:20,alignSelf:'center',marginTop:2}}
+                
                  />
+                 </TouchableOpacity>
                ),
              headerStyle: {
-             //  position: 'absolute',
+           
                backgroundColor: 'transparent',
-              
-              
-              
-              
-              // paddingBottom: 30,
-               elevation: 0,
+  elevation: 0,
                shadowOpacity: 0,
-              // borderBottomWidth: 0,
+           
                paddingTop:40
              },
              headerTitleStyle: {
@@ -177,14 +229,18 @@ const AuthStack = createStackNavigator({
 
                 title: 'SIGN UP',
                 headerLeft: (
-                    <Icon 
-                    name='arrowleft'
-                    size={30}
-                    color={color.white}
-                     onPress={()=>navigation.goBack(null)}
-                     style={{marginLeft:20,alignSelf:'center',marginTop:2}}
-                    />
-                  ),
+                  <TouchableOpacity onPress={()=>navigation.goBack(null)}  
+                  style={{marginLeft:20,alignSelf:'center',marginTop:10,width:30,height:30}}>
+                  <Icon 
+                     
+                     name='arrowleft'
+                     size={25}
+                     color={color.white}
+                      onPress={()=>navigation.goBack(null)}
+                    
+                     />
+                     </TouchableOpacity>
+                   ),
                 headerStyle: {
                 //  position: 'absolute',
                   backgroundColor: 'transparent',
