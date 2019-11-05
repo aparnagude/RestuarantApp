@@ -7,7 +7,7 @@ import window, { heights, widths } from '../../design/dimen';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import BackgroundCarousel from '../../components/BackgroundCarousel';
 import BottomBar from '../../components/BootomBar';
-
+import serverConfig from '../../config/serverConfig';
 class Home extends Component {
     constructor(props){
         super(props);
@@ -51,8 +51,71 @@ class Home extends Component {
               },
               
             ],
+            token:'',
         }
     }
+
+   async componentWillMount(){
+
+    const userToken = await AsyncStorage.getItem('auth');
+    this.setState({token:userToken});
+    this.recomDishes();
+
+    }
+
+    
+    recomDishes = ()  => {
+     
+          
+            
+              var url = serverConfig.baseUrl+'api/items';
+             
+              console.warn("url: "+url);
+            
+          
+              _this = this;
+             
+              fetch(url, {
+                method: 'GET',
+                
+                 headers:{
+                 'Content-Type': 'application/json',
+                  'Authorization':_this.state.token,
+                 }
+               }).then( function(response) {
+               
+                if (response.status == 200) {
+                 
+                
+                    response.json().then(function(data) {
+                      console.warn(data);
+                      _this.setState({ItemList:data});
+                      
+                    });
+                   
+                
+                 
+                } else {
+                  response.json().then(function(data) {
+                  if(Platform.OS === 'android'){
+                    ToastAndroid.show(data.message+"---"+JSON.stringify(data),  ToastAndroid.LONG);
+                  } else {
+                    alert(data.message)
+                  }
+                });
+                 }
+                 console.warn("response: "+JSON.stringify(response));
+                // Examine the text in the response
+               
+              })
+               .catch((error) => {
+                   console.warn('Error:', error);
+                    
+                  });
+           
+                   
+                   }
+  
 
     _bootstrap = async () => {
      
@@ -88,11 +151,11 @@ class Home extends Component {
 
         renderItem={({ item }) => 
         <View style={styles.cardContainer}>
-             <ImageBackground style={styles.Background} source={item.image}>
+             <ImageBackground style={styles.Background} source={require('../../assets/food_image.jpg')}>
             <View style={styles.overlay} /> 
             </ImageBackground>
             <View style={styles.columnContainer}>
-                <Text style={styles.name} numberOfLines={2}>{item.name}</Text>
+                <Text style={styles.name} numberOfLines={2}>{item.itemName}</Text>
                 <View style={styles.rowContainer}>
                 <Text style={{fontFamily:string.fontLatoSemi,fontSize:14,color:color.primaryColor,}}>{'\u20B9'+item.price}</Text>
                <TouchableOpacity style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,}}>
@@ -111,16 +174,16 @@ class Home extends Component {
 <Text style={styles.headingText}>RECOMMENDED DISHES</Text>
                 <FlatList
         data={this.state.ItemList}
-     
+        columnWrapperStyle={styles.row}
         showsHorizontalScrollIndicator={false}
         numColumns={2}
         renderItem={({ item }) => 
         <View style={styles.cardContainer2}>
-             <ImageBackground style={styles.Background} source={item.image}>
+             <ImageBackground style={styles.Background} source={require('../../assets/food_image.jpg')}>
             <View style={styles.overlay} /> 
             </ImageBackground>
             <View style={styles.columnContainer}>
-                <Text style={styles.name} numberOfLines={2}>{item.name}</Text>
+                <Text style={styles.name} numberOfLines={2}>{item.itemName}</Text>
                 <View style={styles.rowContainer}>
                 <Text style={{fontFamily:string.fontLatoSemi,fontSize:14,color:color.primaryColor,}}>{'\u20B9'+item.price}</Text>
                <TouchableOpacity style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,}}>
@@ -183,11 +246,11 @@ cardContainer:{
 },
 cardContainer2:{
   backgroundColor:color.white,
-  width:170,
+  width:widths.by3,
   marginHorizontal:5,
   borderRadius:5,
   elevation:5,
-  height:230,
+  // height:230,
   marginVertical:5
 },
 columnContainer:{
@@ -201,6 +264,10 @@ name:{
   color:color.black,
   marginTop:10
 
+},
+row: {
+  flex: 1,
+  justifyContent: "space-between"
 },
 rowContainer:{
   flexDirection:'row',

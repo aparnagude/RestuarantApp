@@ -17,6 +17,7 @@ import NonVeg from '../screens/afterLogin/nonVeg/NonVeg';
 import Filter from '../screens/afterLogin/Filter';
 import EditProfile from '../screens/afterLogin/Profile/EditProfile';
 import React, {Component} from 'react';
+import { widths,heights } from '../design/dimen';
 
 
 
@@ -161,7 +162,7 @@ const DrawerNavigatorExample = createDrawerNavigator({
 {
     initialRouteName: 'Home',
     contentComponent: SideMenu,
-    drawerWidth: 300
+    drawerWidth: widths.by2
   }
   );
 

@@ -51,6 +51,8 @@ class Login extends Component {
               if (response.status == 200) {
                 console.warn('headers',response.headers['map'].authorization);
                  AsyncStorage.setItem('userToken', 'myToken');
+                 AsyncStorage.setItem('auth', response.headers['map'].authorization);
+
                  _this.props.navigation.navigate('Home');
                 //   _this.props.navigation.navigate('Home');
                 if(Platform.OS==='android'){

@@ -40,7 +40,7 @@ this._bootstrap();
             <View style={styles.overlay} /> 
             <TouchableOpacity style={{alignSelf:'flex-end',marginRight:10,marginTop:-20}}
             onPress={()=>this.props.navigation.dispatch(DrawerActions.closeDrawer())}>
-            <Icon3  name='cross' size={30} />
+            <Icon3  name='cross' size={36} color={color.white} />
 
             </TouchableOpacity>
 <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
@@ -65,7 +65,7 @@ this._bootstrap();
         <View style={styles.menuOptions}>
             <TouchableOpacity style={styles.menuItem} onPress={this.navigateToScreen('home')}>
                 <View style={styles.menuItemIcon}>
-                <Icon2 name="home" size={30} color={color.primary}/>
+                <Icon2 name="home" size={36} color={color.primary}/>
                 </View>
                 <View style={styles.menuItemTextView}>
                     <Text style={styles.menuItemText}>Home</Text>
@@ -75,7 +75,7 @@ this._bootstrap();
     
             <TouchableOpacity style={styles.menuItem} onPress={this.navigateToScreen('Profile')}>
             <View style={styles.menuItemIcon}>
-            <Icon name="user" size={35} color={color.primary}/>
+            <Icon name="user" size={41} color={color.primary}/>
              </View>
                 <View style={styles.menuItemTextView}>
                     <Text style={styles.menuItemText}>Profile</Text>
@@ -90,7 +90,7 @@ this._bootstrap();
     
             <TouchableOpacity style={styles.menuItem} onPress={this.navigateToScreen('about_us')}>
             <View style={styles.menuItemIcon}>
-                    <Icon name="cart" size={30} color={color.primary}/>
+                    <Icon name="cart" size={36} color={color.primary}/>
                 </View>
                 <View style={styles.menuItemTextView}>
                     <Text style={styles.menuItemText}>Cart</Text>
@@ -100,7 +100,7 @@ this._bootstrap();
     
             <TouchableOpacity style={styles.menuItem} onPress={ this.navigateToScreen('contact_us')}>
             <View style={styles.menuItemIcon}>
-                    <Icon name="play" size={35} color={color.primary}/>
+                    <Icon name="play" size={41} color={color.primary}/>
                 </View>
                 <View style={styles.menuItemTextView}>
                     <Text style={styles.menuItemText}>Videos</Text>
@@ -112,7 +112,7 @@ this._bootstrap();
             
             <TouchableOpacity style={styles.menuItem} onPress={this.navigateToScreen('Logout')}>
             <View style={styles.menuItemIcon}>
-                    <Icon2 name="logout" size={24} color={color.primary}/>
+                    <Icon2 name="logout" size={30} color={color.primary}/>
                 </View>
                 <View style={styles.menuItemTextView}>
                     <Text style={styles.menuItemText}>Logout</Text>
@@ -131,7 +131,11 @@ this._bootstrap();
     };
     
     const styles = StyleSheet.create({
-        container: { flex: 1, backgroundColor: "white" },
+        container: { 
+          flex: 1, 
+          backgroundColor: "white" ,
+         
+        },
         menuOptions: {
           flex: 1, 
           flexDirection: 'column', 
@@ -147,8 +151,8 @@ this._bootstrap();
         menuItemIcon: {
           alignItems: 'center', 
           justifyContent: 'center', 
-          width: widths.by8, 
-          height: widths.by8, 
+          width: widths.by12, 
+          height: widths.by12, 
         },
         menuItemTextView: {
           flex: 1, 
@@ -158,19 +162,20 @@ this._bootstrap();
       },
         menuItemText: {
           alignSelf: 'center',
-          fontSize: widths.dp17, 
+          fontSize: widths.dp14, 
           color: color.primary,
           fontFamily: string.fontLatoSemi,
       },
         header: {
           alignSelf: Platform.OS === 'ios' ? 'flex-start' : 'center',
           justifyContent: Platform.OS === 'ios' ? 'flex-start' : 'center',
+         
         },
         Background: {
-            height:150,
+            height:heights.by4,
             alignItems:'center',
             justifyContent:'center',
-           
+          
            
         },
         overlay: {
@@ -179,9 +184,9 @@ this._bootstrap();
           },
         avatar: {
           alignSelf: 'center',
-          width: widths.by5,
-          height: widths.by5,
-          borderRadius: widths.by5,
+          width: widths.by7,
+          height: widths.by7,
+          borderRadius: widths.by7,
           backgroundColor:color.white,
           marginLeft:-20,
           marginRight:10
@@ -202,7 +207,7 @@ alignSelf:'center',
           paddingRight: widths.dp16,
         },
         name: {
-          fontSize: widths.dp18,
+          fontSize: widths.dp17,
           fontFamily: string.fontLatoMed,
           textTransform: 'capitalize',
           color:color.white,
@@ -210,7 +215,7 @@ alignSelf:'center',
          
         },
         mobileNumber: {
-          fontSize: widths.dp16,
+          fontSize: widths.dp14,
           fontFamily: string.fontLatoMed,
           textAlign: 'center',
           color:color.white
