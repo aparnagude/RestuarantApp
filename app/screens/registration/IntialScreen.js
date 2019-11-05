@@ -22,6 +22,9 @@ class IntialScreen extends Component {
         if(screen=='SignUp'){
             this.props.navigation.navigate('SignUp');
         }
+      else if(screen=='Login'){
+            this.props.navigation.navigate('Login');
+        }
 
     }
 
@@ -60,7 +63,7 @@ class IntialScreen extends Component {
                     </View>
                     <View style={{flexDirection:'row',alignSelf:'center'}}>
                     <Text style={[baseStyle.smallText,{color:color.black}]}>Already have an account?</Text>
-                    <Text style={[baseStyle.buttonText,{color:color.primaryColor}]}>LOGIN</Text>
+                    <Text style={[baseStyle.buttonText,{color:color.primaryColor}]} onPress={()=>this.gotoScreen('Login')}>LOGIN</Text>
 
                     </View>
 
