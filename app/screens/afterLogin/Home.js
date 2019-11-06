@@ -1,13 +1,17 @@
 import React, {Component} from 'react';
-import {View, Text,StatusBar,FlatList,ImageBackground,Image,StyleSheet} from 'react-native';
+import {View, Text,StatusBar,FlatList,ImageBackground,Image,StyleSheet,TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import color from '../../design/colors';
 import string from '../../design/strings';
 import window, { heights, widths } from '../../design/dimen';
-import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
+import {  ScrollView } from 'react-native-gesture-handler';
 import BackgroundCarousel from '../../components/BackgroundCarousel';
 import BottomBar from '../../components/BootomBar';
 import serverConfig from '../../config/serverConfig';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon2 from 'react-native-vector-icons/Ionicons';
+import Icon3 from 'react-native-vector-icons/Entypo';
+
 class Home extends Component {
     constructor(props){
         super(props);
@@ -52,6 +56,12 @@ class Home extends Component {
               
             ],
             token:'',
+            counter: [],
+            count:0,
+            visible:false,
+            btprice:[],
+            totalprice:0,
+            popularList:[]
         }
     }
 
@@ -62,6 +72,133 @@ class Home extends Component {
     this.recomDishes();
 
     }
+
+
+    incrementFunc(index, price){
+
+  console.warn(price);
+      let variable=`${index}`;
+      let b=this.state.btprice.slice();
+     
+     
+      let integer=0;
+      let counter = {...this.state.counter}
+      counter[index] = counter[index] || 0;
+      counter[index] += 1;
+    
+      if(Object.keys(counter).includes(variable)){
+       
+        const values = Object.values(counter)[variable];
+        integer=price*values;
+        b[variable]=integer;
+        
+      }
+    
+    this.setState({counter:counter,btprice:b});
+     setTimeout(()=>{
+    
+    
+    
+    
+     
+        
+     
+     this.renderBottom(index,price);
+    //console.warn(counter[index]);
+    
+     },500);
+    }
+    decrementFunc(index, price){
+      let variable=`${index}`;
+      let b=this.state.btprice.slice();
+      let counter = {...this.state.counter}
+      counter[index] = counter[index] || 0;
+      counter[index] -= 1;
+      if(Object.keys(counter).includes(variable)){
+        const values = Object.values(counter)[variable];
+        integer=price*values;
+        b[variable]=integer;
+        
+      }
+      this.setState({ counter,btprice:b },
+        ()=>{
+     
+      })
+      setTimeout(()=>{
+       
+        this.renderBottom(index,price);
+       
+        },500);
+    }
+    
+    renderBottom(index,price){
+      let count=0;
+      let integer=0;
+      
+      for(i=0;i<this.state.ItemList.length;i++){
+    //console.warn(counter[i]);
+      if(this.state.counter[i]>0){
+        count=this.state.counter[i]+count;
+        
+     }
+    
+       
+      }
+      for(i=0;i<this.state.btprice.length;i++){
+        if(this.state.btprice[i]!=null){
+          integer=this.state.btprice[i]+integer;
+        }
+        
+    
+      }
+    
+      if(count>0){
+        setTimeout(()=>{
+    
+          this.setState({count:count,totalprice:integer});
+          this.setState({ visible: true });
+        },500);
+       
+      }
+      else{
+        this.setState({ visible: false });
+      }
+    }
+
+
+
+    nextScreen(){
+      // this._toggleBottomNavigationView();
+     // this.setState({ visible: false });
+      var fArray = new Array();
+      for(i=0;i<this.state.ItemList.length;i++){
+        if(this.state.btprice[i]>0){
+         let obj = {
+           "id":this.state.ItemList[i].id,
+           "name":this.state.ItemList[i].itemName,
+           "totalprice":this.state.ItemList[i],
+           
+           "itemId":this.state.ItemList[i].itemId,
+           
+           "itemType":this.state.ItemList[i].itemType,
+           "counter":this.state.counter[i],
+           "totalAmount":this.state.totalprice,
+           "price":this.state.ItemList[i].price,
+          
+     
+           
+           }
+     
+           fArray.push(obj);
+        }
+      }
+     //console.warn(fArray);
+       this.props.navigation.navigate('CartListScreen',{fArray});
+     
+     
+     }
+
+
 
     
     recomDishes = ()  => {
@@ -89,8 +226,22 @@ class Home extends Component {
                 
                     response.json().then(function(data) {
                       console.warn(data);
-                      _this.setState({ItemList:data});
-                      
+                    
+                      var cropList =data;
+     
+  
+                      for(i=0;i<cropList.length;i++){
+                       let count=_this.state.counter;
+                       count[i]=0;
+                       
+                        _this.setState({counter:count});
+                        //console.warn(_this.state.counter);
+                     
+          
+                        
+                    
+                      }
+                      _this.setState({ItemList:data,popularList:data});
                     });
                    
                 
@@ -145,7 +296,7 @@ class Home extends Component {
 
                     <Text style={styles.headingText}>POPULAR DISHES</Text>
                 <FlatList
-        data={this.state.ItemList}
+        data={this.state.popularList}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
 
@@ -176,8 +327,10 @@ class Home extends Component {
         data={this.state.ItemList}
         columnWrapperStyle={styles.row}
         showsHorizontalScrollIndicator={false}
+        
+        contentContainerStyle={this.state.visible==true?{marginBottom:50}:{marginBottom:0}}
         numColumns={2}
-        renderItem={({ item }) => 
+        renderItem={({ item,index }) => 
         <View style={styles.cardContainer2}>
              <ImageBackground style={styles.Background} source={require('../../assets/food_image.jpg')}>
             <View style={styles.overlay} /> 
@@ -186,9 +339,35 @@ class Home extends Component {
                 <Text style={styles.name} numberOfLines={2}>{item.itemName}</Text>
                 <View style={styles.rowContainer}>
                 <Text style={{fontFamily:string.fontLatoSemi,fontSize:14,color:color.primaryColor,}}>{'\u20B9'+item.price}</Text>
-               <TouchableOpacity style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,}}>
+              
+                {
+                      this.state.counter[index]==0?
+                     <TouchableOpacity 
+                   style={{backgroundColor:color.primaryColor,padding:5,alignSelf:'center', borderRadius:2,  }}
+                   onPress={()=>this.incrementFunc(index,item.price)}>
+                    <Text style={{fontFamily:string.fontLatoSemi,fontSize:14,color:color.white,alignSelf:'center',paddingHorizontal:10}}>ADD </Text>
+                   </TouchableOpacity>
+                   :
+                   <View style={{backgroundColor:color.primaryColor,padding:5,alignSelf:'center', borderRadius:2,
+                    flexDirection:'row',justifyContent:'space-between'}}>
+                   <TouchableOpacity onPress={()=>this.decrementFunc(index,item.price)}> 
+                  <Icon3 name="minus" size={20} color={color.white} /> 
+                  </TouchableOpacity>
+                   <Text style={{color:color.white,alignSelf:'center',paddingHorizontal:10}}>{this.state.counter[index]}</Text>
+                   
+                  <TouchableOpacity onPress={()=>this.incrementFunc(index,item.price)}>
+                  <Icon3 name="plus" size={20} color={color.white} />
+                  </TouchableOpacity>
+
+
+                  </View>
+                   }
+              
+              
+              
+               {/* <TouchableOpacity style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,}}>
                    <Text style={{fontFamily:string.fontLatoSemi,fontSize:14,color:color.white,alignSelf:'center',paddingHorizontal:10}}>ADD</Text>
-               </TouchableOpacity>
+               </TouchableOpacity> */}
                 </View>
                 </View>
             </View>
@@ -200,12 +379,34 @@ class Home extends Component {
 
               
                 </ScrollView>
+
+
                 <View style={styles.bottomContainer}>
+                  {
+ this.state.visible?
+                 
+                  <View style={{flexDirection:'row',backgroundColor:color.primary,width:'100%',
+  height:50,
+justifyContent:'space-between',
+alignItems:'center',
+flexDirection:'row',
+paddingHorizontal:10,
+
+flex:3}}>
+                  <Text style={styles.bottomText}>{this.state.count+' Items'+' | '+'\u20B9 '+this.state.totalprice}</Text>
+<TouchableOpacity onPress={()=>this.nextScreen()}>
+    <Text style={styles.bottomText}>View Cart</Text>
+     </TouchableOpacity> 
+                  </View>
+                  :null
+ }
+                 <View>
                  <BottomBar 
                 
                 onPressDetails={(key) =>this.navigatetoScreen(key)} 
       
                   bottomList={this.state.bottomList}/>
+                  </View> 
                 </View>
             </View>
         );
@@ -234,7 +435,11 @@ headingText:{
 marginTop:20,
   
 },
-
+bottomText:{
+  color:color.white,
+  fontFamily:string.fontLato,
+  fontSize:16
+},
 cardContainer:{
   backgroundColor:color.white,
   width:200,
@@ -246,7 +451,7 @@ cardContainer:{
 },
 cardContainer2:{
   backgroundColor:color.white,
-  width:widths.by3,
+  width:widths.by2p2,
   marginHorizontal:5,
   borderRadius:5,
   elevation:5,
@@ -257,6 +462,19 @@ columnContainer:{
   flexDirection:'column',
   justifyContent:'space-between',
   marginHorizontal:10
+},
+bottomBar:{
+  position:'absolute',
+  bottom:0,
+  backgroundColor:color.secondaryColor,
+  width:'100%',
+  height:50,
+justifyContent:'space-between',
+alignItems:'center',
+flexDirection:'row',
+paddingHorizontal:10,
+marginTop:20,
+flex:3
 },
 name:{
   fontFamily:string.fontLatoSemi,
@@ -280,7 +498,8 @@ bottomContainer:{
   left:0,
   right:0,
   backgroundColor:color.white,
-  elevation:5
+  elevation:5,
+  flexDirection:'column'
 },
 
     header: {
