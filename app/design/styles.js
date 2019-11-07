@@ -71,6 +71,18 @@ smallText:{
     color:color.textlight,
     marginHorizontal:15,
  },
+
+
+    loadingStyle:{
+        justifyContent:'center',
+        alignSelf:'center', 
+        alignItems:'center', 
+       backgroundColor:color.primaryColor,
+        width: 50, 
+        height: 50, 
+        borderRadius: 50/2, 
+        },
+
  })
 
  export default baseStyle;

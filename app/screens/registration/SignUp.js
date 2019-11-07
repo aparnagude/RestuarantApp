@@ -19,7 +19,8 @@ class SignUp extends Component {
             restuarantName:'',
             password:'',
             email:'',
-            cnfrmpswd:''
+            cnfrmpswd:'',
+            loading:false,
             
         }
     }
@@ -33,27 +34,68 @@ class SignUp extends Component {
 
 
 
+    isValid() {
+      const { email, pswd } = this.state;
+      let valid = false;
+      let reg = /^(\+\d{1,3}[- ]?)?\d{10}$/ ;
+      let pinreg= /^(\+\d{1,3}[- ]?)?\d{4}$/;
+      let emailreg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+  
+      
+      
+      if(this.state.name === "" || this.state.name === null) {
+        Obj.displayAlert('Enter name');
+
+    }
+   else if(this.state.mobile === "" || this.state.mobile === null) {
+      Obj.displayAlert('Enter mobile number');
+
+  }
+  else if(this.state.email === "" || this.state.email === null) {
+    Obj.displayAlert('Enter email address');
+
+}
+else if(this.state.restuarantName === "" || this.state.restuarantName === null) {
+  Obj.displayAlert('Enter restuarant name');
+
+}
+     
+     else if(this.state.password === "" || this.state.password === null) {
+          Obj.displayAlert('Enter mobile number');
+  
+      }
+     else if(this.state.cnfrmpswd === "" || this.state.cnfrmpswd === null) {
+        Obj.displayAlert('Enter confirm password');
+
+    }
+    else if(this.state.password!=this.state.cnfrmpswd){
+      Obj.displayAlert('Password not matched');
+    }
+     
+      else {
+      valid = true;
+      }
+      
+      
+      return valid;
+      }
+
 
     signUpHandler = ()  => {
+      if(this.isValid()){
+     this.setState({loading:true});
 		let formData = {
-           
- 
-  "firstName": this.state.name,
-  "gmailId": this.state.email,
- 
- 
-  "mobileNumber": this.state.mobile,
-  "pin": this.state.password,
-  "confirmPin": this.state.cnfrmpswd,
- 
-  "restName": this.state.restuarantName
- 
-            
-             }
+            "firstName": this.state.name,
+            "gmailId": this.state.email,
+            "mobileNumber": this.state.mobile,
+            "pin": this.state.password,
+            "confirmPin": this.state.cnfrmpswd,
+            "restName": this.state.restuarantName
+          }
         
-            //var url = serverConfig.securityUrl+'api/sys/reg/createProfile';
+           
             var url = serverConfig.baseUrl+'api/users/adduser';
-            //startMainScreen();
+          
             console.warn("url: "+url);
             console.warn("formData: "+JSON.stringify(formData));
         
@@ -66,27 +108,21 @@ class SignUp extends Component {
                'Content-Type': 'application/json'
                }
              }).then( function(response) {
-             
+              this.setState({loading:false});
               if (response.status == 200) {
                 _this.props.navigation.navigate('Login');
-                if(Platform.OS==='android'){
-                  ToastAndroid.show("Registration successfull, login with your credentials!",  ToastAndroid.LONG);
-                  response.json().then(function(data) {
-                    console.warn(data);
-                  });
-                  }
-                  else{
-                    alert('Registration successfull, login with your credentials!')
-                  }
+                response.json().then(function(data) {
+                  console.warn(data);
+                  Obj.displayAlert('Registration successfull, login with your credentials');
+
+                });
+               
               
                
               } else {
                 response.json().then(function(data) {
-                if(Platform.OS === 'android'){
-                  ToastAndroid.show(data.message+"---"+JSON.stringify(data),  ToastAndroid.LONG);
-                } else {
-                  alert(data.message)
-                }
+                  Obj.displayAlert(data.message);
+               
               });
                }
                console.warn("response: "+JSON.stringify(response));
@@ -95,9 +131,9 @@ class SignUp extends Component {
             })
              .catch((error) => {
                  console.warn('Error:', error);
-                  
+                 this.setState({loading:false});
                 });
-         
+              }
                  
                  }
 
@@ -175,11 +211,17 @@ class SignUp extends Component {
           secureTextEntry={true}
           
         />
+           {
+          this.state.loading?
+          <View style={baseStyle.loadingStyle}>
+          <ActivityIndicator color='#fff' size='large' style={{justifyContent:'center', alignItems:'center', alignSelf:'center'}}/> 
+          </View>
+          :
           
            <TouchableOpacity style={baseStyle.SignUpButton} onPress={()=>this.signUpHandler()}>
                <Text style={baseStyle.buttonText}>SIGN UP</Text>
            </TouchableOpacity>
-          
+           }
            <View style={{flexDirection:'row',alignSelf:'center'}}>
            <Text style={[baseStyle.smallText,{color:color.black}]}>Already have an account?</Text>
            <Text style={[baseStyle.buttonText,{color:color.primaryColor}]} onPress={()=>this.gotoScreen('Login')}>LOGIN</Text>

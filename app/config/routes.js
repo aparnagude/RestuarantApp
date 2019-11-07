@@ -162,7 +162,7 @@ const DrawerNavigatorExample = createDrawerNavigator({
 {
     initialRouteName: 'Home',
     contentComponent: SideMenu,
-    drawerWidth: widths.by2
+    drawerWidth: '70%'
   }
   );
 

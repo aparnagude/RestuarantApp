@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {View, Text,StyleSheet,TouchableOpacity,Image,ScrollView,StatusBar,ToastAndroid} from 'react-native';
+import {View, Text,StyleSheet,TouchableOpacity,Image,ScrollView,StatusBar,ToastAndroid,ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import color from '../../design/colors';
 import { widths } from '../../design/dimen';
@@ -9,27 +9,57 @@ import baseStyle from '../../design/styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FloatingLabelInput from '../../components/FloatingLabelInput';
 import serverConfig from '../../config/serverConfig';
-
+import Message from '../../components/Message'
 class Login extends Component {
     constructor(props){
         super(props);
+        Obj = new Message();
         this.state={
             mobile:'',
           
             password:'',
+            loading:false,
           
             
         }
     }
+        
+    isValid() {
+      const { email, pswd } = this.state;
+      let valid = false;
+      let reg = /^(\+\d{1,3}[- ]?)?\d{10}$/ ;
+      let pinreg= /^(\+\d{1,3}[- ]?)?\d{4}$/;
+      let emailreg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+  
+      
+      
+      
+     
+      if(this.state.mobile === "" || this.state.mobile === null) {
+          Obj.displayAlert('Enter mobile number');
+  
+      }
+     else if(this.state.password === "" || this.state.password === null) {
+        Obj.displayAlert('Enter password');
 
-    // _signInHandler = async () => {
-    //     await AsyncStorage.setItem('userToken', 'myToken');
-    //     this.props.navigation.navigate('Home');
-    // }
-
+    }
+     
+      else {
+      valid = true;
+      }
+      
+      
+      return valid;
+      }
+  
+  
 
     
     loginHandler = ()  => {
+      if(this.isValid()){
+        this.setState({loading:true});
+
+     
 		let formData = { "mobileNumber": this.state.mobile,"pin": this.state.password}
         
           
@@ -47,35 +77,28 @@ class Login extends Component {
                'Content-Type': 'application/json'
                }
              }).then( function(response) {
-             
+              _this.setState({loading:false});
               if (response.status == 200) {
                 console.warn('headers',response.headers['map'].authorization);
                  AsyncStorage.setItem('userToken', 'myToken');
                  AsyncStorage.setItem('auth', response.headers['map'].authorization);
 
                  _this.props.navigation.navigate('Home');
-                //   _this.props.navigation.navigate('Home');
-                if(Platform.OS==='android'){
-                  ToastAndroid.show("Login successfull",  ToastAndroid.LONG);
-                  response.json().then(function(data) {
-                    console.warn(data);
-                    var profile = data['tokenPk']['user'];
-                    console.warn(profile);
-                    AsyncStorage.setItem('user',profile);
-                  });
-                  }
-                  else{
-                    alert('Login successfull')
-                  }
+                 Obj.displayAlert('Login successfull');
+                 response.json().then(function(data) {
+                  console.warn(data);
+                  var profile = data['tokenPk']['user'];
+                  console.warn(profile);
+                  AsyncStorage.setItem('user',profile);
+                });
+              
+               
               
                
               } else {
                 response.json().then(function(data) {
-                if(Platform.OS === 'android'){
-                  ToastAndroid.show(data.message+"---"+JSON.stringify(data),  ToastAndroid.LONG);
-                } else {
-                  alert(data.message)
-                }
+                  Obj.displayAlert(data.message);
+               
               });
                }
                console.warn("response: "+JSON.stringify(response));
@@ -84,9 +107,10 @@ class Login extends Component {
             })
              .catch((error) => {
                  console.warn('Error:', error);
+                 _this.setState({loading:true});
                   
                 });
-         
+              }
                  
                  }
 
@@ -141,11 +165,17 @@ class Login extends Component {
           secureTextEntry={true}
           
         />
+         {
+          this.state.loading?
+          <View style={baseStyle.loadingStyle}>
+          <ActivityIndicator color='#fff' size='large' style={{justifyContent:'center', alignItems:'center', alignSelf:'center'}}/> 
+          </View>
+          :
           
            <TouchableOpacity style={baseStyle.SignUpButton} onPress={()=>this.loginHandler()}>
                <Text style={baseStyle.buttonText}>LOGIN</Text>
            </TouchableOpacity>
-          
+         }
            <View style={{flexDirection:'row',alignSelf:'center'}}>
            <Text style={[baseStyle.smallText,{color:color.black}]}>Don't have an account?</Text>
            <Text style={[baseStyle.buttonText,{color:color.primaryColor}]} onPress={()=>this.gotoScreen('SignUp')}>SIGN UP</Text>

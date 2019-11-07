@@ -65,7 +65,7 @@ this._bootstrap();
         <View style={styles.menuOptions}>
             <TouchableOpacity style={styles.menuItem} onPress={this.navigateToScreen('home')}>
                 <View style={styles.menuItemIcon}>
-                <Icon2 name="home" size={36} color={color.primary}/>
+                <Icon2 name="home" size={30} color={color.primary}/>
                 </View>
                 <View style={styles.menuItemTextView}>
                     <Text style={styles.menuItemText}>Home</Text>
@@ -75,7 +75,7 @@ this._bootstrap();
     
             <TouchableOpacity style={styles.menuItem} onPress={this.navigateToScreen('Profile')}>
             <View style={styles.menuItemIcon}>
-            <Icon name="user" size={41} color={color.primary}/>
+            <Icon name="user" size={36} color={color.primary}/>
              </View>
                 <View style={styles.menuItemTextView}>
                     <Text style={styles.menuItemText}>Profile</Text>
@@ -90,7 +90,7 @@ this._bootstrap();
     
             <TouchableOpacity style={styles.menuItem} onPress={this.navigateToScreen('about_us')}>
             <View style={styles.menuItemIcon}>
-                    <Icon name="cart" size={36} color={color.primary}/>
+                    <Icon name="cart" size={30} color={color.primary}/>
                 </View>
                 <View style={styles.menuItemTextView}>
                     <Text style={styles.menuItemText}>Cart</Text>
@@ -100,7 +100,7 @@ this._bootstrap();
     
             <TouchableOpacity style={styles.menuItem} onPress={ this.navigateToScreen('contact_us')}>
             <View style={styles.menuItemIcon}>
-                    <Icon name="play" size={41} color={color.primary}/>
+                    <Icon name="play" size={36} color={color.primary}/>
                 </View>
                 <View style={styles.menuItemTextView}>
                     <Text style={styles.menuItemText}>Videos</Text>
@@ -112,7 +112,7 @@ this._bootstrap();
             
             <TouchableOpacity style={styles.menuItem} onPress={this.navigateToScreen('Logout')}>
             <View style={styles.menuItemIcon}>
-                    <Icon2 name="logout" size={30} color={color.primary}/>
+                    <Icon2 name="logout" size={24} color={color.primary}/>
                 </View>
                 <View style={styles.menuItemTextView}>
                     <Text style={styles.menuItemText}>Logout</Text>
@@ -151,8 +151,8 @@ this._bootstrap();
         menuItemIcon: {
           alignItems: 'center', 
           justifyContent: 'center', 
-          width: widths.by12, 
-          height: widths.by12, 
+          width: widths.by7, 
+          height: widths.by7, 
         },
         menuItemTextView: {
           flex: 1, 
@@ -162,7 +162,7 @@ this._bootstrap();
       },
         menuItemText: {
           alignSelf: 'center',
-          fontSize: widths.dp14, 
+          fontSize: widths.dp16, 
           color: color.primary,
           fontFamily: string.fontLatoSemi,
       },
@@ -184,9 +184,9 @@ this._bootstrap();
           },
         avatar: {
           alignSelf: 'center',
-          width: widths.by7,
-          height: widths.by7,
-          borderRadius: widths.by7,
+          width: widths.by5,
+          height: widths.by5,
+          borderRadius: widths.by5,
           backgroundColor:color.white,
           marginLeft:-20,
           marginRight:10
@@ -207,7 +207,7 @@ alignSelf:'center',
           paddingRight: widths.dp16,
         },
         name: {
-          fontSize: widths.dp17,
+          fontSize: widths.dp18,
           fontFamily: string.fontLatoMed,
           textTransform: 'capitalize',
           color:color.white,
@@ -215,7 +215,7 @@ alignSelf:'center',
          
         },
         mobileNumber: {
-          fontSize: widths.dp14,
+          fontSize: widths.dp16,
           fontFamily: string.fontLatoMed,
           textAlign: 'center',
           color:color.white

@@ -237,16 +237,16 @@ marginTop:20,
 
 cardContainer:{
   backgroundColor:color.white,
-  width:200,
+  width:widths.by2p2,
   marginHorizontal:5,
   borderRadius:5,
   elevation:5,
-  height:230,
+//  height:230,
   marginVertical:10
 },
 cardContainer2:{
   backgroundColor:color.white,
-  width:widths.by3,
+  width:widths.by2p2,
   marginHorizontal:5,
   borderRadius:5,
   elevation:5,
@@ -288,7 +288,7 @@ bottomContainer:{
       justifyContent: Platform.OS === 'ios' ? 'flex-start' : 'center',
     },
     Background: {
-        height:120,
+        height:heights.by6,
         alignItems:'center',
         justifyContent:'center',
         borderRadius:5
@@ -298,6 +298,7 @@ bottomContainer:{
     overlay: {
         ...StyleSheet.absoluteFillObject,
         backgroundColor: 'rgba(34,34,34,0.7)',
+        borderRadius:5
       },
 
   
