@@ -68,6 +68,9 @@ class Home extends Component {
    async componentWillMount(){
 
     const userToken = await AsyncStorage.getItem('auth');
+    const user = await AsyncStorage.getItem('user');
+    const userdet=JSON.parse(user);
+    console.warn(userdet.userId);
     this.setState({token:userToken});
     this.recomDishes();
 
@@ -172,11 +175,12 @@ class Home extends Component {
      // this.setState({ visible: false });
       var fArray = new Array();
       for(i=0;i<this.state.ItemList.length;i++){
+        console.warn(this.state.ItemList[i].itemName,this.state.ItemList[i].itemId,this.state.ItemList[i].itemType)
         if(this.state.btprice[i]>0){
          let obj = {
            "id":this.state.ItemList[i].id,
            "name":this.state.ItemList[i].itemName,
-           "totalprice":this.state.ItemList[i],
+          //  "totalprice":this.state.ItemList[i],
            
            "itemId":this.state.ItemList[i].itemId,
            
@@ -192,8 +196,8 @@ class Home extends Component {
            fArray.push(obj);
         }
       }
-     //console.warn(fArray);
-       this.props.navigation.navigate('CartListScreen',{fArray});
+    console.warn(fArray);
+       this.props.navigation.navigate('CartListScreen',{cartList:fArray});
      
      
      }

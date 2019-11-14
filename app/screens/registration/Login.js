@@ -80,16 +80,17 @@ class Login extends Component {
               _this.setState({loading:false});
               if (response.status == 200) {
                 console.warn('headers',response.headers['map'].authorization);
-                 AsyncStorage.setItem('userToken', 'myToken');
+                AsyncStorage.setItem('userToken', 'myToken');
                  AsyncStorage.setItem('auth', response.headers['map'].authorization);
 
-                 _this.props.navigation.navigate('Home');
                  Obj.displayAlert('Login successfull');
                  response.json().then(function(data) {
                   console.warn(data);
                   var profile = data['tokenPk']['user'];
-                  console.warn(profile);
-                  AsyncStorage.setItem('user',profile);
+                  console.warn('----',profile);
+                  AsyncStorage.setItem('user',JSON.stringify(data['tokenPk']['user']));
+                  _this.props.navigation.navigate('Home');
+
                 });
               
                

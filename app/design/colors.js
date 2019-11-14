@@ -7,7 +7,8 @@ const color={
     fbcolor:'#3b5998',
     gcolor:'#d34836',
     linecolor:'#C1B9BA',
-    primary:'#566573'
+    primary:'#566573',
+    light:'#E7E7E7'
 }
 
 export default color;
