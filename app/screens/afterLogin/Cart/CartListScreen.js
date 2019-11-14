@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {NavigationActions} from 'react-navigation';
 // import PropTypes from 'prop-types';
-import {ScrollView, Text, View,StyleSheet,TouchableOpacity,Image,Platform,ImageBackground,StatusBar,FlatList} from 'react-native';
+import {ScrollView, Text, View,StyleSheet,TouchableOpacity,
+ActivityIndicator,FlatList} from 'react-native';
 import { DrawerActions } from 'react-navigation-drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
@@ -12,10 +13,13 @@ import AsyncStorage from '@react-native-community/async-storage';
 import window, { heights, widths } from '../../../design/dimen';
 import baseStyle from '../../../design/styles';
 import BottomBar from '../../../components/BootomBar';
+import Message from '../../../components/Message';
+import serverConfig from '../../../config/serverConfig';
 
 class CartListScreen extends Component {
 constructor(props){
     super(props);
+    Obj = new Message();
     this.state={
         counter: [],
      count:0,
@@ -24,12 +28,16 @@ constructor(props){
      productsList:[],
      visible:false,
      userId:'',
+     token:'',
+     loading:false,
     }
 }
 
 
 async componentWillMount(){
      console.warn('----->',this.props.navigation.state.params.cartList);
+     const userToken = await AsyncStorage.getItem('auth');
+     this.setState({token:userToken});
     const user = await AsyncStorage.getItem('user');
         const userdet=JSON.parse(user);
         console.warn(userdet.userId);
@@ -153,10 +161,111 @@ let count=0;
         }
 
 
+        selectedProducts(){
+          
+       
+
+          
+            
+          var fArray = new Array();
+            
+          for(i=0;i<this.state.productsList.length;i++){
+            if(this.state.counter[i]>0){
+             let obj = {
+
+              "id":this.state.productsList[i].id,
+              "itemId":this.state.productsList[i].itemId,
+
+              "itemName":this.state.productsList[i].itemName,
+              "itemType":this.state.productsList[i].itemType,
+              "quantity":this.state.counter[i],
+            
+              "price":this.state.productsList[i].price,
+
+             
+         
+               
+               }
+         
+               fArray.push(obj);
+               console.warn(fArray);
+            }
+          }
+        
+        
+        
+        
+                
+                if(fArray && fArray.length > 0){
+                  let data = fArray;
+                  this.setState({loading:true})
+                 
+
+                  var url=serverConfig.baseUrl+'api/items/additems';
+                 
+                  console.warn(url,JSON.stringify(data))
+                  _this = this;
+            
+                  fetch(url, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers:{
+                      'Content-Type': 'application/json',
+                      'Authorization':_this.state.token,
+                      'userid':_this.state.userId
+                    }
+                  }).then( function(response) {
+                     console.warn(response);
+                     _this.setState({loading:false})
+                    if(response.status === 200){
+                      response.json().then(function(nData) {
+                    console.warn("Crops Added: "+JSON.stringify(nData));
+                    Obj.displayAlert("Order placed sucessfully");
+
+                   
+                    });
+                      
+                  } else {
+                    _this.setState({loading:false})
+                 Obj.displayAlert(response.status+"");
+                  }
+                  })
+                  .catch(error => {
+                    _this.setState({loading:false})
+                  alert('Error:' + error);
+            
+                  });
+            
+                } else {
+                  _this.setState({loading:false})
+                 Obj.displayAlert('Add atleast one item');
+                }    
+                
+              }
+        
+        
+
+
+
+
+
 
 render(){
     return(
         <View style={{flex:1,backgroundColor:color.light}}>
+         {
+this.state.loading?
+<View style={baseStyle.loadingStyle}>
+<ActivityIndicator color='#fff' size='large' style={{justifyContent:'center', alignItems:'center', alignSelf:'center'}}/> 
+</View>
+:
+         <View style={{justifyContent:'center'}}>
+           {
+             this.state.productsList==''?
+             <Text style={{color:color.linecolor,fontFamily:string.fontLato,fontSize:18,alignSelf:'center',justifyContent:'center',marginTop:50}}>CartList empty</Text>
+
+          :
+           <View>
         <View style={{flexDirection:'column',justifyContent:'space-between',alignItems:'center',paddingHorizontal:10,backgroundColor:color.white,width:'100%',paddingVertical:10,marginVertical:20}}>
         <Text style={{color:color.black,fontFamily:string.fontLato,fontSize:18,alignSelf:'flex-start',marginHorizontal:10,marginVertical:10}}>Product Details</Text>
         <View style={{width:'100%',alignItems:'center',flexDirection:'row',justifyContent:'space-between'}}>
@@ -167,18 +276,18 @@ render(){
     extraData={this.state.counter}
 
     renderItem={({ item,index }) =>  (
-      <View style={{width:'100%',alignItems:'center',flexDirection:'row',justifyContent:'space-between',}}>
-           <Text  numberOfLines={2} style={{color:color.primary,fontFamily:string.fontLatoSemi,fontSize:15,alignSelf:'center',}}>{item.name+' ( '+item.itemType+' )'}</Text>
+      <View style={{width:'100%',alignItems:'center',flexDirection:'row',justifyContent:'space-between',marginHorizontal:10}}>
+           <Text  numberOfLines={2} style={{color:color.primary,fontFamily:string.fontLatoSemi,fontSize:15,alignSelf:'center',width:'40%'}}>{item.name+' ( '+item.itemType+' )'}</Text>
            <View style={{alignItems:'center',alignSelf:'flex-end',flexDirection:'row',marginHorizontal:10,marginBottom:10}}>
            {
             this.state.counter[index]==0 ?
            <TouchableOpacity 
-         style={{alignSelf:'center',padding:10,borderRadius:2,borderWidth:1,borderColor:color.secondaryColor,alignSelf:'flex-end'}}
+         style={{alignSelf:'center',padding:10,borderRadius:2,borderWidth:1,borderColor:color.linecolor,alignSelf:'flex-end'}}
          onPress={()=>this.incrementFunc(index,item.price)}>
           <Text style={{color:color.primary,alignSelf:'center',paddingHorizontal:10}}>ADD </Text>
          </TouchableOpacity>
          :
-           <View style={{alignSelf:'center',padding:10,borderRadius:2,borderWidth:1,borderColor:color.secondaryColor,flexDirection:'row',alignSelf:'flex-end'}}>
+           <View style={{alignSelf:'center',padding:10,borderRadius:2,borderWidth:1,borderColor:color.linecolor,flexDirection:'row',alignSelf:'flex-end'}}>
          <TouchableOpacity onPress={()=>this.decrementFunc(index,item.price)}> 
         <Icon3 name="minus" size={20} color={color.primary} /> 
         </TouchableOpacity>
@@ -228,6 +337,10 @@ keyExtractor={item => item.id}
 </View>
 </View>
         </View>
+        </View>
+         }
+        </View>
+          } 
 {
 
 this.state.visible?
@@ -236,10 +349,17 @@ this.state.visible?
     
       <Text style={{color:color.white,fontFamily:string.fontLatoMed,}}> {'Price    '+'\u20B9 '+this.state.totalprice}</Text>
      
-   
-   <TouchableOpacity onPress={() => {this.setState({ paymentDialog: true });}}>
-   <Text style={{color:color.white,fontFamily:string.fontLatoMed,}}>Pay Now</Text>
-     </TouchableOpacity> 
+   {
+     this.state.loading?
+     <View>
+          <ActivityIndicator color='#fff' size='large' style={{justifyContent:'center', alignItems:'center', alignSelf:'center'}}/> 
+          </View>
+     :
+     <TouchableOpacity onPress={() => {this.selectedProducts()}}>
+     <Text style={{color:color.white,fontFamily:string.fontLatoMed,}}>Pay Now</Text>
+       </TouchableOpacity> 
+   }
+  
 
    </View>
    :null

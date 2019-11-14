@@ -128,7 +128,7 @@ const FirstActivity_StackNavigator = createStackNavigator({
   EditProfile:{
     screen:EditProfile,
     navigationOptions: ({ navigation }) => ({
-      title: 'Edit Profile',
+      title: 'My Account',
      
       headerStyle: {
         backgroundColor: color.primary,

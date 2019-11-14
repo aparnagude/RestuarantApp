@@ -73,7 +73,7 @@ this._bootstrap();
                 </View>
             </TouchableOpacity>
     
-            <TouchableOpacity style={styles.menuItem} onPress={this.navigateToScreen('Profile')}>
+            <TouchableOpacity style={styles.menuItem} onPress={this.navigateToScreen('EditProfile')}>
             <View style={styles.menuItemIcon}>
             <Icon name="user" size={36} color={color.primary}/>
              </View>
@@ -88,7 +88,7 @@ this._bootstrap();
     
     
     
-            <TouchableOpacity style={styles.menuItem} onPress={this.navigateToScreen('about_us')}>
+            <TouchableOpacity style={styles.menuItem} onPress={this.navigateToScreen('CartListScreen')}>
             <View style={styles.menuItemIcon}>
                     <Icon name="cart" size={30} color={color.primary}/>
                 </View>
