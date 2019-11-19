@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {View, Text,StyleSheet,TouchableOpacity,Image,ScrollView,StatusBar,ToastAndroid} from 'react-native';
+import {View, Text,StyleSheet,TouchableOpacity,Image,ScrollView,StatusBar,ToastAndroid,ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import color from '../../design/colors';
 import { widths } from '../../design/dimen';
@@ -9,10 +9,12 @@ import baseStyle from '../../design/styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FloatingLabelInput from '../../components/FloatingLabelInput';
 import serverConfig from '../../config/serverConfig';
+import Message from '../../components/Message'
 
 class SignUp extends Component {
     constructor(props){
         super(props);
+        Obj = new Message();
         this.state={
             mobile:'',
             name:'',
@@ -61,7 +63,7 @@ else if(this.state.restuarantName === "" || this.state.restuarantName === null) 
 }
      
      else if(this.state.password === "" || this.state.password === null) {
-          Obj.displayAlert('Enter mobile number');
+          Obj.displayAlert('Enter password');
   
       }
      else if(this.state.cnfrmpswd === "" || this.state.cnfrmpswd === null) {
@@ -108,7 +110,7 @@ else if(this.state.restuarantName === "" || this.state.restuarantName === null) 
                'Content-Type': 'application/json'
                }
              }).then( function(response) {
-              this.setState({loading:false});
+              _this.setState({loading:false});
               if (response.status == 200) {
                 _this.props.navigation.navigate('Login');
                 response.json().then(function(data) {

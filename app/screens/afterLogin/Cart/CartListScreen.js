@@ -29,19 +29,23 @@ constructor(props){
      visible:false,
      userId:'',
      token:'',
-     loading:false,
+     loading:true,
+     restId:'',
     }
 }
 
 
 async componentWillMount(){
+  setTimeout(()=>{
+this.setState({loading:false})
+  },1000);
      console.warn('----->',this.props.navigation.state.params.cartList);
      const userToken = await AsyncStorage.getItem('auth');
      this.setState({token:userToken});
     const user = await AsyncStorage.getItem('user');
         const userdet=JSON.parse(user);
-        console.warn(userdet.userId);
-        this.setState({userId:userdet.userId});
+        console.warn(userdet.userId,this.state.token);
+        this.setState({userId:userdet.userId,restId:userdet.restId});
        let b=this.state.counter.slice();
        let t=this.state.totalprice;
       
@@ -173,10 +177,10 @@ let count=0;
             if(this.state.counter[i]>0){
              let obj = {
 
-              "id":this.state.productsList[i].id,
+              // "id":this.state.productsList[i].id,
               "itemId":this.state.productsList[i].itemId,
 
-              "itemName":this.state.productsList[i].itemName,
+              "itemName":this.state.productsList[i].name,
               "itemType":this.state.productsList[i].itemType,
               "quantity":this.state.counter[i],
             
@@ -201,7 +205,7 @@ let count=0;
                   this.setState({loading:true})
                  
 
-                  var url=serverConfig.baseUrl+'api/items/additems';
+                  var url=serverConfig.baseUrl+'api/items/additems/cart/'+this.state.restId+'/134';
                  
                   console.warn(url,JSON.stringify(data))
                   _this = this;
@@ -212,16 +216,18 @@ let count=0;
                     headers:{
                       'Content-Type': 'application/json',
                       'Authorization':_this.state.token,
-                      'userid':_this.state.userId
+                      'userId':_this.state.userId
                     }
                   }).then( function(response) {
                      console.warn(response);
-                     _this.setState({loading:false})
+                    // _this.setState({loading:false})
                     if(response.status === 200){
                       response.json().then(function(nData) {
                     console.warn("Crops Added: "+JSON.stringify(nData));
-                    Obj.displayAlert("Order placed sucessfully");
-
+                    _this.getOrderedItems(nData);
+                    // _this.props.navigation.navigate('Home');
+                    // Obj.displayAlert("Order placed sucessfully");
+                    
                    
                     });
                       
@@ -248,6 +254,54 @@ let count=0;
 
 
 
+             getOrderedItems(data){
+ this.setState({loading:true})
+                       
+
+                        var url=serverConfig.baseUrl+'api/items/order/'+this.state.restId+'/134';
+                       
+                        console.warn(url,JSON.stringify(data))
+                        _this = this;
+                  
+                        fetch(url, {
+                          method: 'POST',
+                          body: JSON.stringify(data),
+                          headers:{
+                            'Content-Type': 'application/json',
+                            'Authorization':_this.state.token,
+                            'userId':_this.state.userId
+                          }
+                        }).then( function(response) {
+                           console.warn(response);
+                           _this.setState({loading:false})
+                          if(response.status === 200){
+                            response.json().then(function(nData) {
+                          console.warn("Crops Added: "+JSON.stringify(nData));
+                          _this.props.navigation.navigate('Home');
+                          Obj.displayAlert("Order placed sucessfully");
+                          
+                         
+                          });
+                            
+                        } else {
+                          _this.setState({loading:false})
+                       Obj.displayAlert(response.status+"");
+                        }
+                        })
+                        .catch(error => {
+                          _this.setState({loading:false})
+                        alert('Error:' + error);
+                  
+                        });
+                  
+                      } 
+                      
+                  
+              
+              
+
+
+
 
 
 render(){
@@ -255,9 +309,9 @@ render(){
         <View style={{flex:1,backgroundColor:color.light}}>
          {
 this.state.loading?
-<View style={baseStyle.loadingStyle}>
-<ActivityIndicator color='#fff' size='large' style={{justifyContent:'center', alignItems:'center', alignSelf:'center'}}/> 
-</View>
+
+<ActivityIndicator color={color.primaryColor} size='large' style={{justifyContent:'center', alignItems:'center', alignSelf:'center',marginTop:50}}/> 
+
 :
          <View style={{justifyContent:'center'}}>
            {
@@ -349,16 +403,16 @@ this.state.visible?
     
       <Text style={{color:color.white,fontFamily:string.fontLatoMed,}}> {'Price    '+'\u20B9 '+this.state.totalprice}</Text>
      
-   {
+   {/* {
      this.state.loading?
      <View>
           <ActivityIndicator color='#fff' size='large' style={{justifyContent:'center', alignItems:'center', alignSelf:'center'}}/> 
           </View>
-     :
+     : */}
      <TouchableOpacity onPress={() => {this.selectedProducts()}}>
      <Text style={{color:color.white,fontFamily:string.fontLatoMed,}}>Pay Now</Text>
        </TouchableOpacity> 
-   }
+   {/* } */}
   
 
    </View>

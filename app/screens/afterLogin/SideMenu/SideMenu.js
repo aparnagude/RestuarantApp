@@ -84,7 +84,15 @@ this._bootstrap();
             </TouchableOpacity>
               
            
-    
+            <TouchableOpacity style={styles.menuItem} onPress={this.navigateToScreen('MyOrders')}>
+            <View style={styles.menuItemIcon}>
+                    <Icon name="cart" size={30} color={color.primary}/>
+                </View>
+                <View style={styles.menuItemTextView}>
+                    <Text style={styles.menuItemText}>My Orders</Text>
+                   
+                </View>
+            </TouchableOpacity>
     
     
     

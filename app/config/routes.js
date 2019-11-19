@@ -17,7 +17,7 @@ import NonVeg from '../screens/afterLogin/nonVeg/NonVeg';
 import Filter from '../screens/afterLogin/Filter';
 import EditProfile from '../screens/afterLogin/Profile/EditProfile';
 import CartListScreen from '../screens/afterLogin/Cart/CartListScreen';
-
+import MyOrders from '../screens/afterLogin/myOrders/MyOrders';
 import React, {Component} from 'react';
 import { widths,heights } from '../design/dimen';
 
@@ -83,7 +83,7 @@ const FirstActivity_StackNavigator = createStackNavigator({
  NonVeg:{
     screen:NonVeg,
     navigationOptions: ({ navigation }) => ({
-      title: 'Non Veg',
+      title: navigation.state.params.title,
      
       headerStyle: {
         backgroundColor: color.primary,
@@ -146,6 +146,23 @@ const FirstActivity_StackNavigator = createStackNavigator({
     screen:CartListScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Cart',
+     
+      headerStyle: {
+        backgroundColor: color.primary,
+        elevation:0,
+      },
+      headerTitleStyle: {
+              fontFamily: string.fontLato,
+              letterSpacing: 0.2,
+              fontWeight: '100',
+            },
+      headerTintColor: '#fff',
+    }),
+  },
+  MyOrders:{
+    screen:MyOrders,
+    navigationOptions: ({ navigation }) => ({
+      title: 'My Orders',
      
       headerStyle: {
         backgroundColor: color.primary,

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text,StatusBar,FlatList,ImageBackground,Image,StyleSheet,TouchableOpacity} from 'react-native';
+import {View, Text,StatusBar,FlatList,ImageBackground,Image,StyleSheet,TouchableOpacity,ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import color from '../../design/colors';
 import string from '../../design/strings';
@@ -11,10 +11,12 @@ import serverConfig from '../../config/serverConfig';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import Icon3 from 'react-native-vector-icons/Entypo';
+import Message from '../../components/Message';
 
 class Home extends Component {
     constructor(props){
         super(props);
+        Obj = new Message();
         this.state={
             ItemList:[
                 {"id":"1","name":"Chicken Biriyani","image":require('../../assets/tanduri_chicken.jpg'),"price":"250"},
@@ -61,7 +63,8 @@ class Home extends Component {
             visible:false,
             btprice:[],
             totalprice:0,
-            popularList:[]
+            popularList:[],
+            loader:false
         }
     }
 
@@ -207,7 +210,7 @@ class Home extends Component {
     
     recomDishes = ()  => {
      
-          
+          this.setState({loader:true});
             
               var url = serverConfig.baseUrl+'api/items';
              
@@ -224,7 +227,7 @@ class Home extends Component {
                   'Authorization':_this.state.token,
                  }
                }).then( function(response) {
-               
+                _this.setState({loader:false});
                 if (response.status == 200) {
                  
                 
@@ -252,11 +255,8 @@ class Home extends Component {
                  
                 } else {
                   response.json().then(function(data) {
-                  if(Platform.OS === 'android'){
-                    ToastAndroid.show(data.message+"---"+JSON.stringify(data),  ToastAndroid.LONG);
-                  } else {
-                    alert(data.message)
-                  }
+                    _this.setState({loader:false});
+                  Obj.displayAlert(data.message);
                 });
                  }
                  console.warn("response: "+JSON.stringify(response));
@@ -264,6 +264,7 @@ class Home extends Component {
                
               })
                .catch((error) => {
+                _this.setState({loader:false});
                    console.warn('Error:', error);
                     
                   });
@@ -281,8 +282,22 @@ class Home extends Component {
 
     navigatetoScreen (route) {
       console.warn(route)
-    
-        this.props.navigation.navigate(route);
+    if(route=='Veg'){
+      this.props.navigation.navigate('NonVeg',{itemType:'VEG',title:'Vegetarian'});
+
+    }
+    else  if(route=='NonVeg'){
+      this.props.navigation.navigate('NonVeg',{itemType:'NONVEG',title:'NonVegetarian'});
+
+    }
+    else  if(route=='Starter'){
+      this.props.navigation.navigate('NonVeg',{itemType:'STARTER',title:'Starters'});
+
+    }
+    else  if(route=='Dessert'){
+      this.props.navigation.navigate('NonVeg',{itemType:'DESSERT',title:'Desserts'});
+
+    }
       
     }
 
@@ -290,6 +305,13 @@ class Home extends Component {
         return(
             <View style={styles.container}>
                 <StatusBar backgroundColor={color.primary} barStyle="default"/>
+              
+{
+this.state.loader?
+
+<ActivityIndicator color={color.primaryColor} size='large' style={{justifyContent:'center',alignSelf:'center'}}/> 
+
+:
                <ScrollView showsVerticalScrollIndicator={false} style={{marginBottom:50}}>
                 <View style={styles.secondContainer}>
                 <View style={{backgroundColor:color.white}}>
@@ -384,7 +406,7 @@ class Home extends Component {
               
                 </ScrollView>
 
-
+  }
                 <View style={styles.bottomContainer}>
                   {
  this.state.visible?
@@ -421,7 +443,8 @@ export default Home;
 const styles = StyleSheet.create({
     container: { 
       flex: 1, 
-      backgroundColor: "white"
+      backgroundColor: "white",
+      justifyContent:'center'
      },
   
 secondContainer:{
@@ -449,7 +472,7 @@ cardContainer:{
   width:widths.by2p2,
   marginHorizontal:5,
   borderRadius:5,
-  elevation:5,
+  elevation:3,
 //  height:230,
   marginVertical:10
 },
@@ -458,7 +481,7 @@ cardContainer2:{
   width:widths.by2p2,
   marginHorizontal:5,
   borderRadius:5,
-  elevation:5,
+   elevation:2,
   // height:230,
   marginVertical:5
 },
