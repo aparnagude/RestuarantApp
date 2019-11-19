@@ -1,7 +1,7 @@
 import {createAppContainer,createSwitchNavigator,DrawerActions } from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
  import { createDrawerNavigator } from 'react-navigation-drawer';
-import {View,Text,StyleSheet,Platform,TouchableOpacity,Image,StatusBar} from 'react-native';
+import {View,Text,StyleSheet,Platform,TouchableOpacity,Image,StatusBar,BackAndroid,} from 'react-native';
 import Login from '../screens/registration/Login';
 import Home from '../screens/afterLogin/Home';
 import Loading from '../screens/registration/Loading';
@@ -20,6 +20,7 @@ import CartListScreen from '../screens/afterLogin/Cart/CartListScreen';
 import MyOrders from '../screens/afterLogin/myOrders/MyOrders';
 import React, {Component} from 'react';
 import { widths,heights } from '../design/dimen';
+import { existsTypeAnnotation } from '@babel/types';
 
 
 
@@ -216,12 +217,12 @@ const DrawerNavigatorExample = createDrawerNavigator({
 
 const AuthStack = createStackNavigator({ 
     
-    IntialScreen: {
-        screen:IntialScreen,
-        navigationOptions: {
-            header: () => null,
-            },
-    },
+    // IntialScreen: {
+    //     screen:IntialScreen,
+    //     navigationOptions: {
+    //         header: () => null,
+    //         },
+    // },
      Login: {
          screen: Login,
          navigationOptions: ({ navigation }) => ({
@@ -229,19 +230,19 @@ const AuthStack = createStackNavigator({
              headerTintColor:color.white,
 
              title: 'LOGIN',
-             headerLeft: (
-              <TouchableOpacity onPress={()=>navigation.goBack(null)}  
-              style={{marginLeft:20,alignSelf:'center',marginTop:10,width:30,height:30}}>
-              <Icon 
+            //  headerLeft: (
+            //   <TouchableOpacity onPress={()=>navigation.goBack(null)}  
+            //   style={{marginLeft:20,alignSelf:'center',marginTop:10,width:30,height:30}}>
+            //   <Icon 
                  
-                 name='arrowleft'
-                 size={25}
-                 color={color.white}
-                  onPress={()=>navigation.goBack(null)}
+            //      name='arrowleft'
+            //      size={25}
+            //      color={color.white}
+            //       onPress={()=>existsTypeAnnotation()}
                 
-                 />
-                 </TouchableOpacity>
-               ),
+            //      />
+            //      </TouchableOpacity>
+            //    ),
              headerStyle: {
            
                backgroundColor: 'transparent',
@@ -303,7 +304,7 @@ const AuthStack = createStackNavigator({
         
 },
 {
-    initialRouteName: 'IntialScreen'
+    initialRouteName: 'Login'
 },
 {
     mode: 'modal',

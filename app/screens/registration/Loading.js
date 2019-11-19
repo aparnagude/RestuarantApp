@@ -14,7 +14,7 @@ export default class Loading extends React.Component {
      
 
         const userToken = await AsyncStorage.getItem('userToken');
-        this.props.navigation.navigate(userToken ? 'Home' : 'IntialScreen');
+        this.props.navigation.navigate(userToken ? 'Home' : 'Login');
     }
 
     render() {

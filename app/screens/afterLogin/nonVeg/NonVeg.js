@@ -15,6 +15,7 @@ import baseStyle from '../../../design/styles';
 import BottomBar from '../../../components/BootomBar';
 import serverConfig from '../../../config/serverConfig';
 
+
 class NonVeg extends Component {
 constructor(props){
     super(props);
@@ -63,6 +64,8 @@ constructor(props){
          
     }
 }
+
+
 
 
 async componentWillMount(){
@@ -269,7 +272,26 @@ allDishes = ()  => {
       
       
 
-
+           navigatetoScreen (route) {
+            console.warn(route)
+          if(route=='Veg'){
+            this.props.navigation.push('NonVeg',{itemType:'VEG',title:'Vegetarian'});
+      
+          }
+          else  if(route=='NonVeg'){
+            this.props.navigation.push('NonVeg',{itemType:'NONVEG',title:'NonVegetarian'});
+      
+          }
+          else  if(route=='Starter'){
+            this.props.navigation.push('NonVeg',{itemType:'STARTER',title:'Starters'});
+      
+          }
+          else  if(route=='Dessert'){
+            this.props.navigation.push('NonVeg',{itemType:'DESSERT',title:'Desserts'});
+      
+          }
+            
+          }
 
 render(){
     return(
@@ -383,7 +405,13 @@ flex:3}}>
                   </View>
                   :null
  }
-               
+                 <View>
+                 <BottomBar 
+                
+                onPressDetails={(key) =>this.navigatetoScreen(key)} 
+      
+                  bottomList={this.state.bottomList}/>
+                  </View> 
                 </View>
 
              </View>

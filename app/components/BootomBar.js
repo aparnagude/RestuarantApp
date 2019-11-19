@@ -26,8 +26,8 @@ render(){
                                 value: item.id,
                             });
                         }}>
-							<Image source={item.image} style={value!=item.id?styles.image:[styles.image]}/>
-       <Text style={value!=item.id?styles.text:[styles.text]}>{item.name}</Text>
+							<Image source={item.image} style={value!=item.id?styles.image:[styles.image,{tintColor:color.primaryColor}]}/>
+       <Text style={value!=item.id?styles.text:[styles.text,{color:color.primaryColor}]}>{item.name}</Text>
 							
                                
 						
