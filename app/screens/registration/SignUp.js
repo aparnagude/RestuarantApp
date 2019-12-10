@@ -1,15 +1,16 @@
 import React, {Component} from 'react';
 
-import {View, Text,StyleSheet,TouchableOpacity,Image,ScrollView,StatusBar,ToastAndroid,ActivityIndicator} from 'react-native';
+import {View, Text,StyleSheet,TouchableOpacity,Image,ScrollView,StatusBar,Keyboard,ActivityIndicator,FlatList} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import color from '../../design/colors';
-import { widths } from '../../design/dimen';
+import { widths,heights } from '../../design/dimen';
 import string from '../../design/strings';
 import baseStyle from '../../design/styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FloatingLabelInput from '../../components/FloatingLabelInput';
 import serverConfig from '../../config/serverConfig';
 import Message from '../../components/Message'
+import Dialog, { DialogTitle,DialogButton, DialogContent ,DialogFooter,ScaleAnimation} from 'react-native-popup-dialog'
 
 class SignUp extends Component {
     constructor(props){
@@ -23,18 +24,17 @@ class SignUp extends Component {
             email:'',
             cnfrmpswd:'',
             loading:false,
-            
+            restArray:[],
+            restDialog:false,
+            loader:false,
+          
         }
     }
+
+componentDidMount(){
+  this.restList();
   
-    _bootstrap = async () => {
-     
-
-        await AsyncStorage.clear();
-        this.props.navigation.navigate('Login');
-    }
-
-
+}
 
     isValid() {
       const { email, pswd } = this.state;
@@ -81,6 +81,59 @@ else if(this.state.restuarantName === "" || this.state.restuarantName === null) 
       
       return valid;
       }
+
+
+
+ restList() {
+     
+        _this=this;
+  var url = serverConfig.baseUrl+'api/users/restNames';
+       
+  _this.setState({loader:true})
+        
+      fetch(url, {
+      method: 'GET',
+      headers:{
+      'Content-Type': 'application/json',
+      // 'Authorization': this.state.token,
+      // 'userid':this.state.user.userid,
+      // 'uniqueId':this.state.user.uniqueId
+      }
+      }).then( function(response) {
+    
+        _this.setState({loader:false});
+    
+        if(response.status === 200){
+         
+          response.json().then(function(responseJson) {
+    
+            _this.setState({
+            //  restDialog: true,
+              restArray:responseJson,
+              });
+        
+             
+            
+           
+          });
+          
+        } else {
+          response.json().then(function(data) {
+            
+           Obj.displayAlert(data.error+" "+data.message);
+          });
+          
+         
+           
+         
+        }
+      })
+      .catch(error => console.warn('Error:', error));
+   
+        
+    }
+    
+
 
 
     signUpHandler = ()  => {
@@ -146,11 +199,20 @@ else if(this.state.restuarantName === "" || this.state.restuarantName === null) 
         }
 
     }
+    
+  selectVilage = (item) => {
+    // alert(item);
+     this.setState({
+       restDialog: false,
+       restuarantName:item
+       })
+ }
 
     render(){
         return(
             <View style={baseStyle.MainContainer}>
             <StatusBar translucent backgroundColor={'transparent'} barStyle="default" />
+
 
        <ScrollView>
        <View style={baseStyle.Background}>
@@ -162,6 +224,12 @@ else if(this.state.restuarantName === "" || this.state.restuarantName === null) 
           
           </View>
        </View>
+       {
+  this.state.loader?
+  
+  <ActivityIndicator color={color.primaryColor} size='large' style={{justifyContent:'center', alignItems:'center', alignSelf:'center',marginTop:heights.by2half}}/> 
+
+  :
        <View style={styles.SecondContainer}>
 
       
@@ -192,8 +260,13 @@ else if(this.state.restuarantName === "" || this.state.restuarantName === null) 
         <FloatingLabelInput
           label='RESTUARANT NAME'
           value={this.state.restuarantName}
-          onChangeText={(text)=>this.setState({restuarantName:text})}
-         
+          onTouchStart = {() =>{
+            this.setState({restDialog:true});
+            setTimeout(()=>{
+Keyboard.dismiss();
+            },1000)
+        } }
+        
         />
         <FloatingLabelInput
           label='PASSWORD'
@@ -213,6 +286,7 @@ else if(this.state.restuarantName === "" || this.state.restuarantName === null) 
           secureTextEntry={true}
           
         />
+         
            {
           this.state.loading?
           <View style={baseStyle.loadingStyle}>
@@ -232,7 +306,50 @@ else if(this.state.restuarantName === "" || this.state.restuarantName === null) 
 
 
        </View>
+    }
        </ScrollView>
+      
+       <Dialog
+       visible={this.state.restDialog}
+       width={widths.nintyper}
+       dialogTitle={<DialogTitle textStyle={{color: color.primaryColor,fontSize: heights.dp12, fontFamily: string.fontLato}} title="Select Restuarants" />}
+       footer={
+        <DialogFooter> 
+          <DialogButton
+          text="Cancel"
+          textStyle={{color: color.black,fontSize: widths.by25, fontFamily: string.fontLatoMed}}
+          onPress={() => {
+          this.setState({ restDialog: false });
+          }}
+          key="cancelBtn"
+          />
+          </DialogFooter>
+     
+          }
+       onTouchOutside={() => {
+         this.setState({ restDialog: false });
+       }}
+       onHardwareBackPress={() => {
+         this.setState({ restDialog: false });
+        }}
+     >
+       <DialogContent>
+      <FlatList
+       data={this.state.restArray}
+       ItemSeparatorComponent={this.renderSeparator}
+       renderItem={({ item }) => (
+   <TouchableOpacity key={`${item.id}`} onPress={() => this.selectVilage(item)} style={{padding:10}}>
+   
+        <Text style={{fontSize:16, color: color.primary, fontFamily: string.fontLatoMed}}>{`${item}`}</Text>
+       
+   </TouchableOpacity>
+   
+          )}
+       />
+      
+       </DialogContent>
+     </Dialog>
+
 
    </View>
         );

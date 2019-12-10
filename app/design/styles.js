@@ -6,7 +6,8 @@ import string from './strings';
  const baseStyle=StyleSheet.create({
     MainContainer:{
         flex:1,
-        backgroundColor:color.white
+        backgroundColor:color.white,
+       
     },
     Background: {
         width:'100%',

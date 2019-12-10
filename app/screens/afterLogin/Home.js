@@ -64,18 +64,21 @@ class Home extends Component {
             btprice:[],
             totalprice:0,
             popularList:[],
-            loader:false
+            loader:false,
+            userId:''
         }
     }
 
-   async componentWillMount(){
+
+   async componentDidMount(){
 
     const userToken = await AsyncStorage.getItem('auth');
     const user = await AsyncStorage.getItem('user');
     const userdet=JSON.parse(user);
     console.warn(userdet.userId);
-    this.setState({token:userToken});
+    this.setState({token:userToken,userId:userdet.userId});
     this.recomDishes();
+    this.apply_Sky_Blue();
 
     }
 
@@ -225,6 +228,7 @@ class Home extends Component {
                  headers:{
                  'Content-Type': 'application/json',
                   'Authorization':_this.state.token,
+                  'userId':_this.state.userId
                  }
                }).then( function(response) {
                 _this.setState({loader:false});
@@ -233,21 +237,17 @@ class Home extends Component {
                 
                     response.json().then(function(data) {
                       console.warn(data);
-                    
-                      var cropList =data;
+                   
+                    var cropList =data;
      
   
-                      for(i=0;i<cropList.length;i++){
-                       let count=_this.state.counter;
-                       count[i]=0;
-                       
-                        _this.setState({counter:count});
-                        //console.warn(_this.state.counter);
+                    for(i=0;i<cropList.length;i++){
+                     let count=_this.state.counter;
+                     count[i]=0;
                      
-          
-                        
-                    
-                      }
+                      _this.setState({counter:count});
+                    }
+                   
                       _this.setState({ItemList:data,popularList:data});
                     });
                    
@@ -300,7 +300,11 @@ class Home extends Component {
     }
       
     }
+    apply_Sky_Blue=()=>{
 
+      this.props.navigation.navigate('Home',{table: '4'});
+  
+    }
     render(){
         return(
             <View style={styles.container}>

@@ -44,6 +44,20 @@ class NavigationDrawerStructure extends Component {
   }
 }
 
+class RightButton extends Component {
+  //Structure for the navigatin Drawer
+ 
+  render() {
+    return (
+      <View style={{ flexDirection: 'row' }}>
+        <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
+          {/*Donute Button Image */}
+          <Text style={{paddingLeft:10,alignSelf:'center'}}></Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+}
 
 
 const FirstActivity_StackNavigator = createStackNavigator({
@@ -53,6 +67,13 @@ const FirstActivity_StackNavigator = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: 'Home',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerRight: (
+        <TouchableOpacity
+        //  onPress={() => navigation.navigate('YourRoute')}
+        >
+    <Text>{navigation.state.params.table}</Text>
+        </TouchableOpacity>
+      ),
       headerStyle: {
         backgroundColor: color.primary,
       },
