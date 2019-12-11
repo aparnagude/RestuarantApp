@@ -12,8 +12,11 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import Icon3 from 'react-native-vector-icons/Entypo';
 import Message from '../../components/Message';
+import Dialog, { DialogTitle,DialogButton, DialogContent ,DialogFooter,ScaleAnimation} from 'react-native-popup-dialog'
 
 class Home extends Component {
+
+
     constructor(props){
         super(props);
         Obj = new Message();
@@ -65,22 +68,104 @@ class Home extends Component {
             totalprice:0,
             popularList:[],
             loader:false,
-            userId:''
+            userId:'',
+            restId:'',
+            tableArray:[],
+            tableDialog:false,
+            tableNo:''
         }
+this.tableData=this.tableData.bind(this);
     }
-
+  
 
    async componentDidMount(){
 
     const userToken = await AsyncStorage.getItem('auth');
+    const tableId = await AsyncStorage.getItem('tableNo');
+
     const user = await AsyncStorage.getItem('user');
     const userdet=JSON.parse(user);
     console.warn(userdet.userId);
-    this.setState({token:userToken,userId:userdet.userId});
+    this.setState({token:userToken,userId:userdet.userId,restId:userdet.restId,tableNo:tableId});
+    this.tableList();
     this.recomDishes();
-    this.apply_Sky_Blue();
+    this.props.navigation.setParams({ 
+      headerSubTitle: this.state.tableNo,
+  onPressSyncButton:this.tableData
+    });
+  //  this.apply_Sky_Blue();
 
     }
+    tableData() {
+      this.setState({
+          tableDialog: true
+      })
+    }
+    static navigationOptions = ({ navigation }) => {
+      const { params = {} } = navigation.state;
+     
+      return {
+      headerRight:<TouchableOpacity  onPress={ () => params.onPressSyncButton() }>
+      <Text style={{fontFamily:string.fontLato,color:color.white,marginRight:20}}>{"Table "+params.headerSubTitle}</Text>
+
+      </TouchableOpacity> 
+      
+
+         
+      };
+  };
+
+
+  tableList() {
+    _this=this;
+  
+
+var url = serverConfig.baseUrl+'api/tables/'+_this.state.restId;
+   console.warn('table',url)
+_this.setState({loader:true})
+    
+  fetch(url, {
+  method: 'GET',
+  headers:{
+  'Content-Type': 'application/json',
+  'Authorization': _this.state.token,
+  'userid':_this.state.userId,
+  // 'uniqueId':this.state.user.uniqueId
+  }
+  }).then( function(response) {
+
+    _this.setState({loader:false});
+
+    if(response.status === 200){
+     
+      response.json().then(function(responseJson) {
+
+       console.warn('tables',responseJson);
+       _this.setState({
+       //   tableDialog: true,
+          tableArray:responseJson,
+          });
+     
+        
+       
+      });
+      
+    } else {
+      response.json().then(function(data) {
+        
+       Obj.displayAlert(data.error+" "+data.message);
+      });
+      
+     
+       
+     
+    }
+  })
+  .catch(error => console.warn('Error:', error));
+
+    
+}
+
 
 
     incrementFunc(index, price){
@@ -250,7 +335,7 @@ class Home extends Component {
                    
                       _this.setState({ItemList:data,popularList:data});
                     });
-                   
+                  
                 
                  
                 } else {
@@ -300,11 +385,21 @@ class Home extends Component {
     }
       
     }
-    apply_Sky_Blue=()=>{
+    selectTable = (item) => {
+      // alert(item);
+      console.warn(item);
 
-      this.props.navigation.navigate('Home',{table: '4'});
-  
-    }
+       this.setState({
+         tableDialog: false,
+         tableNo:item
+         });
+       
+         this.props.navigation.setParams({ 
+          headerSubTitle: item,
+      onPressSyncButton:this.tableData
+        });
+        AsyncStorage.setItem('tableNo',item);
+   }
     render(){
         return(
             <View style={styles.container}>
@@ -410,7 +505,50 @@ this.state.loader?
               
                 </ScrollView>
 
+
   }
+
+<Dialog
+       visible={this.state.tableDialog}
+       width={widths.nintyper}
+       dialogTitle={<DialogTitle textStyle={{color: color.primaryColor,fontSize: heights.dp12, fontFamily: string.fontLato}} title="Select Table" />}
+       footer={
+        <DialogFooter> 
+          <DialogButton
+          text="Cancel"
+          textStyle={{color: color.black,fontSize: widths.by25, fontFamily: string.fontLatoMed}}
+          onPress={() => {
+          this.setState({ tableDialog: false });
+          }}
+          key="cancelBtn"
+          />
+          </DialogFooter>
+     
+          }
+       onTouchOutside={() => {
+         this.setState({ tableDialog: false });
+       }}
+       onHardwareBackPress={() => {
+         this.setState({ tableDialog: false });
+        }}
+     >
+       <DialogContent>
+      <FlatList
+       data={this.state.tableArray}
+       ItemSeparatorComponent={this.renderSeparator}
+       renderItem={({ item }) => (
+   <TouchableOpacity key={`${item.id}`} onPress={() => this.selectTable(item.tableId)} style={{padding:10}}>
+   
+        <Text style={{fontSize:16, color: color.primary, fontFamily: string.fontLatoMed}}>{`${'Table '+item.tableId}`}</Text>
+       
+   </TouchableOpacity>
+   
+          )}
+       />
+      
+       </DialogContent>
+     </Dialog>
+
                 <View style={styles.bottomContainer}>
                   {
  this.state.visible?

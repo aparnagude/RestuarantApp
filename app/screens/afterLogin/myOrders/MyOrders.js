@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {NavigationActions} from 'react-navigation';
 // import PropTypes from 'prop-types';
-import {ScrollView, Text, View,StyleSheet,TouchableOpacity,Image,Platform,StatusBar,FlatList,ActivityIndicator} from 'react-native';
+import {ScrollView, Text, View,StyleSheet,TouchableOpacity,LayoutAnimation,Image,Platform,StatusBar,FlatList,ActivityIndicator} from 'react-native';
 import { DrawerActions } from 'react-navigation-drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
@@ -13,6 +13,8 @@ import window, { heights, widths } from '../../../design/dimen';
 import baseStyle from '../../../design/styles';
 import BottomBar from '../../../components/BootomBar';
 import serverConfig from '../../../config/serverConfig';
+import ExpandableKitComponent from './ExpandableKitComponent'
+
 
 class MyOrders extends Component {
 constructor(props){
@@ -25,6 +27,7 @@ constructor(props){
           itemType:'',
           restId:'',
           loading:false,
+          tableNo:''
     }
 }
 
@@ -32,10 +35,12 @@ constructor(props){
 async componentWillMount(){
 
   const userToken = await AsyncStorage.getItem('auth');
+  const tableId = await AsyncStorage.getItem('tableNo');
+
   const user = await AsyncStorage.getItem('user');
   const userdet=JSON.parse(user);
   console.warn(userdet.userId);
-  this.setState({token:userToken,userId:userdet.userId,restId:userdet.restId});
+  this.setState({token:userToken,userId:userdet.userId,restId:userdet.restId,tableNo:tableId});
   this.myOrders();
 
   }
@@ -44,7 +49,7 @@ async componentWillMount(){
      
         this.setState({loading:true});  
             
-  var url = serverConfig.baseUrl+'api/items/order/list/'+this.state.restId+'/134';
+  var url = serverConfig.baseUrl+'api/items/order/list/'+this.state.restId+'/'+this.state.tableNo;
  
   console.warn("url: "+url);
 
@@ -99,7 +104,20 @@ async componentWillMount(){
        
        }
 
-
+       updateLayout = index => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        const array = this.state.ItemList;
+        array.map((value, placeindex) =>
+          placeindex === index
+            ? (array[placeindex]['isExpanded'] = !array[placeindex]['isExpanded'])
+            : (array[placeindex]['isExpanded'] = false)
+        );
+        this.setState(() => {
+          return {
+            ItemList: array,
+          };
+        });
+      };
 
 render(){
     return(
@@ -109,35 +127,46 @@ render(){
                    this.state.loading?
                    <ActivityIndicator color={color.primaryColor} size='large' style={{justifyContent:'center', alignItems:'center', alignSelf:'center',marginTop:100}}/> 
                    : 
-               
-                <FlatList
-                 
-                data={this.state.ItemList}
-                
-                renderItem={({ item,index }) =>  (
-                <View style={{backgroundColor:color.white,flexDirection:'column',marginHorizontal:5,marginVertical:5}}>
-                <View style={{backgroundColor:'white',elevation:3,flexDirection:'row',}}>
-                   <TouchableOpacity >
-                      <Image source={require('../../../assets/food_image.jpg')} style={{ height:heights.by6,width:heights.by6, resizeMode: 'stretch',borderBottomLeftRadius:4,borderTopLeftRadius:4,borderBottomRightRadius:4,borderTopRightRadius:4}} />
-                   </TouchableOpacity>
+                   <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom: 20,marginTop:10,}} >
 
-                   <View style={{flexGrow: 3,flex: 1,marginLeft:10, alignContent:'center',justifyContent:'center',marginRight:10,marginTop:10,marginBottom:5 }}>
-                   <TouchableOpacity  >
-                      <Text numberOfLines = { 1} style={{fontSize: 16, fontFamily: string.fontSourceBold,color:'#04040d'}} >{item.itemName}</Text>
-                      <Text note style={{fontSize: 14, fontFamily: string.fontLatoSemi,marginTop:5,color:'#c0c0c0'}}>{"Quantity: "+item.quantity+" | "+item.itemType}</Text>
-                      <Text note numberOfLines = { 2} style={{fontSize: 14, fontFamily: string.fontLatoSemi,marginTop:5,color:'#c0c0c0'}}>{'\u20B9 '+item.price}</Text>
-  </TouchableOpacity>
+                    {this.state.ItemList.map((item, key) => (
+                    <ExpandableKitComponent
+                      key={item}
+                      onClickFunction={this.updateLayout.bind(this, key)}
+                      item={item}
+                    />
+                  ))}
+                  </ScrollView>
+               
+               
+//                 <FlatList
+                 
+//                 data={this.state.ItemList}
+                
+//                 renderItem={({ item,index }) =>  (
+//                 <View style={{backgroundColor:color.white,flexDirection:'column',marginHorizontal:5,marginVertical:5}}>
+//                 <View style={{backgroundColor:'white',elevation:3,flexDirection:'row',}}>
+//                    <TouchableOpacity >
+//                       <Image source={require('../../../assets/food_image.jpg')} style={{ height:heights.by6,width:heights.by6, resizeMode: 'stretch',borderBottomLeftRadius:4,borderTopLeftRadius:4,borderBottomRightRadius:4,borderTopRightRadius:4}} />
+//                    </TouchableOpacity>
+
+//                    <View style={{flexGrow: 3,flex: 1,marginLeft:10, alignContent:'center',justifyContent:'center',marginRight:10,marginTop:10,marginBottom:5 }}>
+//                    <TouchableOpacity  >
+//                       <Text numberOfLines = { 1} style={{fontSize: 16, fontFamily: string.fontSourceBold,color:'#04040d'}} >{item.itemName}</Text>
+//                       <Text note style={{fontSize: 14, fontFamily: string.fontLatoSemi,marginTop:5,color:'#c0c0c0'}}>{"Quantity: "+item.quantity+" | "+item.itemType}</Text>
+//                       <Text note numberOfLines = { 2} style={{fontSize: 14, fontFamily: string.fontLatoSemi,marginTop:5,color:'#c0c0c0'}}>{'\u20B9 '+item.price}</Text>
+//   </TouchableOpacity>
                           
                        
-                   </View>
+//                    </View>
                   
-                 </View>
-</View>
- )}
+//                  </View>
+// </View>
+//  )}
            
- keyExtractor={item => item.sid}
+//  keyExtractor={item => item.sid}
 
-/>
+// />
  }
              </View>
     );

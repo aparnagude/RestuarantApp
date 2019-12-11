@@ -67,13 +67,7 @@ const FirstActivity_StackNavigator = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: 'Home',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-      headerRight: (
-        <TouchableOpacity
-        //  onPress={() => navigation.navigate('YourRoute')}
-        >
-    <Text>{navigation.state.params.table}</Text>
-        </TouchableOpacity>
-      ),
+     
       headerStyle: {
         backgroundColor: color.primary,
       },

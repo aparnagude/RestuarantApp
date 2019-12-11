@@ -31,17 +31,20 @@ constructor(props){
      token:'',
      loading:true,
      restId:'',
+     tableNo:'',
     }
 }
 
 
-async componentWillMount(){
+async componentDidMount(){
   setTimeout(()=>{
 this.setState({loading:false})
   },1000);
      console.warn('----->',this.props.navigation.state.params.cartList);
      const userToken = await AsyncStorage.getItem('auth');
-     this.setState({token:userToken});
+     const tableId = await AsyncStorage.getItem('tableNo');
+
+     this.setState({token:userToken,tableNo:tableId});
     const user = await AsyncStorage.getItem('user');
         const userdet=JSON.parse(user);
         console.warn(userdet.userId,this.state.token);
@@ -205,7 +208,7 @@ let count=0;
                   this.setState({loading:true})
                  
 
-                  var url=serverConfig.baseUrl+'api/items/additems/cart/'+this.state.restId+'/134';
+                  var url=serverConfig.baseUrl+'api/items/additems/cart/'+this.state.restId+'/'+this.state.tableNo;
                  
                   console.warn(url,JSON.stringify(data))
                   _this = this;
@@ -258,7 +261,7 @@ let count=0;
  this.setState({loading:true})
                        
 
-                        var url=serverConfig.baseUrl+'api/items/order/'+this.state.restId+'/134';
+                        var url=serverConfig.baseUrl+'api/items/order/'+this.state.restId+'/'+this.state.tableNo;
                        
                         console.warn(url,JSON.stringify(data))
                         _this = this;

@@ -82,6 +82,7 @@ class Login extends Component {
                 console.warn('headers',response.headers['map'].authorization);
                 AsyncStorage.setItem('userToken', 'myToken');
                  AsyncStorage.setItem('auth', response.headers['map'].authorization);
+                 AsyncStorage.setItem('tableNo','0');
 
                  Obj.displayAlert('Login successfull');
                  response.json().then(function(data) {
