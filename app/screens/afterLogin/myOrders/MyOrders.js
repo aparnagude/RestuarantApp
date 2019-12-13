@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {NavigationActions} from 'react-navigation';
 // import PropTypes from 'prop-types';
-import {ScrollView, Text, View,StyleSheet,TouchableOpacity,LayoutAnimation,Image,Platform,StatusBar,FlatList,ActivityIndicator} from 'react-native';
+import {ScrollView, Text, View,StyleSheet,TouchableOpacity,LayoutAnimation,
+  Image,Platform,StatusBar,FlatList,ActivityIndicator,UIManager} from 'react-native';
 import { DrawerActions } from 'react-navigation-drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
@@ -18,7 +19,11 @@ import ExpandableKitComponent from './ExpandableKitComponent'
 
 class MyOrders extends Component {
 constructor(props){
+
     super(props);
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
     this.state={
         ItemList:[],
      
@@ -125,7 +130,7 @@ render(){
                 <StatusBar backgroundColor={color.primary} barStyle="default"/>
                 {
                    this.state.loading?
-                   <ActivityIndicator color={color.primaryColor} size='large' style={{justifyContent:'center', alignItems:'center', alignSelf:'center',marginTop:100}}/> 
+                   <ActivityIndicator color={color.primaryColor} size='large' style={{justifyContent:'center', alignItems:'center', alignSelf:'center',marginTop:heights.by2half}}/> 
                    : 
                    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom: 20,marginTop:10,}} >
 

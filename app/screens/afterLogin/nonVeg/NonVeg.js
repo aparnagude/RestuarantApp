@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {NavigationActions} from 'react-navigation';
+import {NavigationActions,} from 'react-navigation';
+import { HeaderBackButton } from 'react-navigation-stack';
 // import PropTypes from 'prop-types';
 import {ScrollView, Text, View,StyleSheet,TouchableOpacity,Image,
   Platform,ImageBackground,StatusBar,FlatList,ActivityIndicator} from 'react-native';
@@ -66,8 +67,12 @@ constructor(props){
 }
 
 
-
-
+static navigationOptions = ({navigation}) => {
+  return{
+  
+    headerLeft:(<HeaderBackButton onPress={()=>{navigation.navigate('Home')}} tintColor={color.white} />)
+ }
+}
 async componentWillMount(){
 
   const userToken = await AsyncStorage.getItem('auth');
@@ -299,7 +304,7 @@ render(){
                 <StatusBar backgroundColor={color.primary} barStyle="default"/>
                 {
                    this.state.loading?
-                   <ActivityIndicator color={color.primaryColor} size='large' style={{justifyContent:'center', alignItems:'center', alignSelf:'center',marginTop:100}}/> 
+                   <ActivityIndicator color={color.primaryColor} size='large' style={{justifyContent:'center', alignItems:'center', alignSelf:'center',marginTop:heights.by2half}}/> 
                    : 
                   
                 <View style={{marginBottom:20,backgroundColor:color.white}}>
@@ -327,15 +332,15 @@ render(){
                {/* List */}
                {
                      this.state.ItemList==''?
-                     <Text style={{color:color.linecolor,fontFamily:string.fontLato,fontSize:18,alignSelf:'center',justifyContent:'center',marginTop:50}}>Items not available</Text>
+                     <Text style={{color:color.linecolor,fontFamily:string.fontLato,fontSize:18,alignSelf:'center',justifyContent:'center',marginTop:heights.by2half}}>Items not available</Text>
 
                      :
-               <ScrollView style={{marginBottom:70,}}>
+               <ScrollView style={{marginBottom:30,}}>
                    
                 <Text style={styles.headingText}>RECOMMENDED DISHES</Text>
                 <FlatList
                     data={this.state.ItemList}
-                
+                    olumnWrapperStyle={styles.row}
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={this.state.visible==true?{marginBottom:30}:{marginBottom:0}}
                     numColumns={2}
@@ -426,6 +431,10 @@ const styles=StyleSheet.create({
         flex:1,
         backgroundColor:color.white
 },
+row: {
+  flex: 1,
+  justifyContent: "space-between"
+},
 topbarContainer:{
     position:'absolute',
     top:0,
@@ -490,7 +499,7 @@ cardContainer2:{
   backgroundColor:color.white,
   width:widths.by2p2,
   marginHorizontal:5,
-  borderRadius:5,
+
   elevation:3,
   // height:230,
   marginVertical:5
@@ -498,7 +507,8 @@ cardContainer2:{
 columnContainer:{
   flexDirection:'column',
   justifyContent:'space-between',
-  marginHorizontal:10
+  marginHorizontal:10,
+  borderRadius:3
 },
   name:{
     fontFamily:string.fontLatoSemi,

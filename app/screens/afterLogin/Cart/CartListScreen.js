@@ -300,12 +300,6 @@ let count=0;
                       } 
                       
                   
-              
-              
-
-
-
-
 
 render(){
     return(
@@ -313,13 +307,13 @@ render(){
          {
 this.state.loading?
 
-<ActivityIndicator color={color.primaryColor} size='large' style={{justifyContent:'center', alignItems:'center', alignSelf:'center',marginTop:50}}/> 
+<ActivityIndicator color={color.primaryColor} size='large' style={{justifyContent:'center', alignItems:'center', alignSelf:'center',marginTop:heights.by2half}}/> 
 
 :
          <View style={{justifyContent:'center'}}>
            {
              this.state.productsList==''?
-             <Text style={{color:color.linecolor,fontFamily:string.fontLato,fontSize:18,alignSelf:'center',justifyContent:'center',marginTop:50}}>CartList empty</Text>
+             <Text style={{color:color.linecolor,fontFamily:string.fontLato,fontSize:18,alignSelf:'center',justifyContent:'center',marginTop:heights.by2half}}>CartList empty</Text>
 
           :
            <View>

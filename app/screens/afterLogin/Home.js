@@ -511,6 +511,7 @@ this.state.loader?
 <Dialog
        visible={this.state.tableDialog}
        width={widths.nintyper}
+       style={{backgroundColor:color.white}}
        dialogTitle={<DialogTitle textStyle={{color: color.primaryColor,fontSize: heights.dp12, fontFamily: string.fontLato}} title="Select Table" />}
        footer={
         <DialogFooter> 

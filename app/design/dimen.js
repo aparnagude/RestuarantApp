@@ -51,6 +51,7 @@ export const widths = {
     seventyper: window.width * 0.70,
     dp12: window.width * 0.030,
     dp14: window.width * 0.035,
+    dp15:window.width * 0.037,
     dp16: window.width * 0.040,
     dp17: window.width * 0.048,
     dp18: window.width * 0.055,
