@@ -261,7 +261,7 @@ let count=0;
  this.setState({loading:true})
                        
 
-                        var url=serverConfig.baseUrl+'api/items/order/'+this.state.restId+'/'+this.state.tableNo;
+                        var url=serverConfig.baseUrl+'api/items/order/'+this.state.restId+'/'+this.state.tableNo+'/'+this.state.userId;
                        
                         console.warn(url,JSON.stringify(data))
                         _this = this;
@@ -272,7 +272,7 @@ let count=0;
                           headers:{
                             'Content-Type': 'application/json',
                             'Authorization':_this.state.token,
-                            'userId':_this.state.userId
+                            //'userId':_this.state.userId
                           }
                         }).then( function(response) {
                            console.warn(response);

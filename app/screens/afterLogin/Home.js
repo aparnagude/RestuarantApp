@@ -13,7 +13,7 @@ import Icon2 from 'react-native-vector-icons/Ionicons';
 import Icon3 from 'react-native-vector-icons/Entypo';
 import Message from '../../components/Message';
 import Dialog, { DialogTitle,DialogButton, DialogContent ,DialogFooter,ScaleAnimation} from 'react-native-popup-dialog'
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 class Home extends Component {
 
 
@@ -420,26 +420,60 @@ this.state.loader?
 
 
                     <Text style={styles.headingText}>POPULAR DISHES</Text>
+                   
                 <FlatList
         data={this.state.popularList}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
 
         renderItem={({ item }) => 
-        <View style={styles.cardContainer}>
-             <ImageBackground style={styles.Background} source={require('../../assets/food_image.jpg')}>
-            <View style={styles.overlay} /> 
-            </ImageBackground>
-            <View style={styles.columnContainer}>
-                <Text style={styles.name} numberOfLines={2}>{item.itemName}</Text>
-                <View style={styles.rowContainer}>
-                <Text style={{fontFamily:string.fontLatoSemi,fontSize:14,color:color.primaryColor,}}>{'\u20B9'+item.price}</Text>
-               <TouchableOpacity style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,}}>
-                   <Text style={{fontFamily:string.fontLatoSemi,fontSize:14,color:color.white,alignSelf:'center',paddingHorizontal:10}}>ADD</Text>
-               </TouchableOpacity>
-                </View>
-                </View>
-            </View>
+
+                <View style={{flex:1,backgroundColor:color.white,marginHorizontal:4,marginVertical:4,flexDirection:'column'}}>
+                  
+                  <View style={{position:'absolute',top:10,elevation:3,width:wp('25%'),height:hp('10%'),borderRadius:5,alignSelf:'center'}}>
+                  <Image style={{width:wp('25%'),height:hp('10%'),borderRadius:5}} source={require('../../assets/food_image.jpg')}/>
+                  </View>
+                   <View style={{borderRadius:5, width: wp('30%'),height: hp('13%'),elevation:3,marginTop:heights.by15}}>
+                  <View style={{flexDirection:'column',marginTop:heights.by25}}>
+                   <Text style={{fontFamily:string.fontLatoSemi,fontSize:hp('1.7%'),color:color.black,alignSelf:'flex-start',marginTop:10,marginHorizontal:10}} numberOfLines={2}>{item.itemName}</Text>
+                   <View style={styles.rowContainer}>
+                   <TouchableOpacity style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,width:wp('13%')}}>
+                    <Text style={{fontFamily:string.fontLatoSemi,fontSize:hp('1.3%'),color:color.white,alignSelf:'center',paddingHorizontal:10}}>ADD</Text>
+                </TouchableOpacity>
+            <Text style={{fontFamily:string.fontLatoSemi,fontSize: hp('1.7%') ,color:color.black,}}>{'\u20B9'+item.price}</Text>
+               
+                 </View>
+                 </View>
+                     </View>
+                  </View>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // <View style={styles.cardContainer}>
+        //      <ImageBackground style={styles.Background} source={require('../../assets/food_image.jpg')}>
+        //     <View style={styles.overlay} /> 
+        //     </ImageBackground>
+        //     <View style={styles.columnContainer}>
+        //         <Text style={styles.name} numberOfLines={2}>{item.itemName}</Text>
+        //         <View style={styles.rowContainer}>
+        //         <Text style={{fontFamily:string.fontLatoSemi,fontSize:14,color:color.primaryColor,}}>{'\u20B9'+item.price}</Text>
+        //        <TouchableOpacity style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,}}>
+        //            <Text style={{fontFamily:string.fontLatoSemi,fontSize:14,color:color.white,alignSelf:'center',paddingHorizontal:10}}>ADD</Text>
+        //        </TouchableOpacity>
+        //         </View>
+        //         </View>
+        //     </View>
        
     }
         keyExtractor={item => item.id}
@@ -450,30 +484,34 @@ this.state.loader?
 <Text style={styles.headingText}>RECOMMENDED DISHES</Text>
                 <FlatList
         data={this.state.ItemList}
-        columnWrapperStyle={styles.row}
+      //  columnWrapperStyle={styles.row}
         showsHorizontalScrollIndicator={false}
         
         contentContainerStyle={this.state.visible==true?{marginBottom:50}:{marginBottom:0}}
-        numColumns={2}
+       numColumns={3}
         renderItem={({ item,index }) => 
-        <View style={styles.cardContainer2}>
-             <ImageBackground style={styles.Background} source={require('../../assets/food_image.jpg')}>
-            <View style={styles.overlay} /> 
-            </ImageBackground>
-            <View style={styles.columnContainer}>
-                <Text style={styles.name} numberOfLines={2}>{item.itemName}</Text>
-                <View style={styles.rowContainer}>
-                <Text style={{fontFamily:string.fontLatoSemi,fontSize:14,color:color.primaryColor,}}>{'\u20B9'+item.price}</Text>
-              
-                {
+
+
+        <View style={{backgroundColor:color.white,marginHorizontal:4,marginVertical:4,flexDirection:'column'}}>
+                  
+        <View style={{position:'absolute',top:10,elevation:3,width:wp('25%'),height:hp('10%'),borderRadius:5,alignSelf:'center'}}>
+        <Image style={{width:wp('25%'),height:hp('10%'),borderRadius:5}} source={require('../../assets/food_image.jpg')}/>
+        </View>
+         <View style={{borderRadius:5, width: wp('30%'),height: hp('13%'),elevation:3,marginTop:heights.by15}}>
+        <View style={{flexDirection:'column',marginTop:heights.by25}}>
+         <Text style={{fontFamily:string.fontLatoSemi,fontSize:hp('1.7%'),color:color.black,alignSelf:'flex-start',marginTop:10,marginHorizontal:10}} numberOfLines={2}>{item.itemName}</Text>
+         <View style={styles.rowContainer}>
+
+         {
                       this.state.counter[index]==0?
-                     <TouchableOpacity 
-                   style={{backgroundColor:color.primaryColor,padding:5,alignSelf:'center', borderRadius:2,  }}
-                   onPress={()=>this.incrementFunc(index,item.price)}>
-                    <Text style={{fontFamily:string.fontLatoSemi,fontSize:14,color:color.white,alignSelf:'center',paddingHorizontal:10}}>ADD </Text>
-                   </TouchableOpacity>
+
+                      <TouchableOpacity style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,width:wp('13%')}}
+                      onPress={()=>this.incrementFunc(index,item.price)}>
+                      <Text style={{fontFamily:string.fontLatoSemi,fontSize:hp('1.3%'),color:color.white,alignSelf:'center',paddingHorizontal:10}}>ADD</Text>
+                  </TouchableOpacity>
+                  
                    :
-                   <View style={{backgroundColor:color.primaryColor,padding:5,alignSelf:'center', borderRadius:2,
+                   <View style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,width:wp('13%'),
                     flexDirection:'row',justifyContent:'space-between'}}>
                    <TouchableOpacity onPress={()=>this.decrementFunc(index,item.price)}> 
                   <Icon3 name="minus" size={20} color={color.white} /> 
@@ -487,17 +525,61 @@ this.state.loader?
 
                   </View>
                    }
+
+
+        
+  <Text style={{fontFamily:string.fontLatoSemi,fontSize: hp('1.7%') ,color:color.black,}}>{'\u20B9'+item.price}</Text>
+     
+       </View>
+       </View>
+           </View>
+        </View>
+
+
+
+
+
+
+
+        // <View style={styles.cardContainer2}>
+        //      <ImageBackground style={styles.Background} source={require('../../assets/food_image.jpg')}>
+        //     <View style={styles.overlay} /> 
+        //     </ImageBackground>
+        //     <View style={styles.columnContainer}>
+        //         <Text style={styles.name} numberOfLines={2}>{item.itemName}</Text>
+        //         <View style={styles.rowContainer}>
+        //         <Text style={{fontFamily:string.fontLatoSemi,fontSize:14,color:color.primaryColor,}}>{'\u20B9'+item.price}</Text>
+              
+        //         {
+        //               this.state.counter[index]==0?
+        //              <TouchableOpacity 
+        //            style={{backgroundColor:color.primaryColor,padding:5,alignSelf:'center', borderRadius:2,  }}
+        //            onPress={()=>this.incrementFunc(index,item.price)}>
+        //             <Text style={{fontFamily:string.fontLatoSemi,fontSize:14,color:color.white,alignSelf:'center',paddingHorizontal:10}}>ADD </Text>
+        //            </TouchableOpacity>
+        //            :
+        //            <View style={{backgroundColor:color.primaryColor,padding:5,alignSelf:'center', borderRadius:2,
+        //             flexDirection:'row',justifyContent:'space-between'}}>
+        //            <TouchableOpacity onPress={()=>this.decrementFunc(index,item.price)}> 
+        //           <Icon3 name="minus" size={20} color={color.white} /> 
+        //           </TouchableOpacity>
+        //            <Text style={{color:color.white,alignSelf:'center',paddingHorizontal:10}}>{this.state.counter[index]}</Text>
+                   
+        //           <TouchableOpacity onPress={()=>this.incrementFunc(index,item.price)}>
+        //           <Icon3 name="plus" size={20} color={color.white} />
+        //           </TouchableOpacity>
+
+
+        //           </View>
+        //            }
               
               
               
-               {/* <TouchableOpacity style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,}}>
-                   <Text style={{fontFamily:string.fontLatoSemi,fontSize:14,color:color.white,alignSelf:'center',paddingHorizontal:10}}>ADD</Text>
-               </TouchableOpacity> */}
-                </View>
-                </View>
-            </View>
-       
-    }
+            
+            //     </View>
+            //     </View>
+            // </View>
+          }
         keyExtractor={item => item.id}
       />
 </View>
@@ -505,6 +587,7 @@ this.state.loader?
               
                 </ScrollView>
 
+           
 
   }
 
@@ -587,7 +670,8 @@ const styles = StyleSheet.create({
     container: { 
       flex: 1, 
       backgroundColor: "white",
-      justifyContent:'center'
+      justifyContent:'center',
+      marginHorizontal:10
      },
   
 secondContainer:{
@@ -599,7 +683,7 @@ secondContainer:{
 headingText:{
   fontFamily:string.fontLato,
   color:color.black,
-  fontSize:18,
+  fontSize:hp('1.8%'),
   alignSelf:'flex-start',
   marginHorizontal:10,
 marginTop:20,
@@ -648,8 +732,9 @@ flex:3
 },
 name:{
   fontFamily:string.fontLatoSemi,
-  fontSize:16,
+  fontSize:hp('2%'),
   color:color.black,
+  alignSelf:'flex-start',
   marginTop:10
 
 },
@@ -660,13 +745,14 @@ row: {
 rowContainer:{
   flexDirection:'row',
   justifyContent:'space-between',
-  marginVertical:10
+  marginVertical:10,
+  marginHorizontal:10
 },
 bottomContainer:{
   position:'absolute',
   bottom:0,
-  left:0,
-  right:0,
+  left:-10,
+  right:-10,
   backgroundColor:color.white,
   elevation:5,
   flexDirection:'column'
