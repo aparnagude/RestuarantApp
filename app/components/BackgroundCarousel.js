@@ -2,6 +2,7 @@ import * as React from "react";
 import { StyleSheet, View, ScrollView, Dimensions, Image } from "react-native";
 import window, { IMAGE_HEIGHT, IMAGE_HEIGHT_SMALL,widths,heights, HEADER_SIZE } from '../design/dimen';
 import color from "../design/colors";
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const DEVICE_WIDTH = Dimensions.get("window").width;
 
@@ -49,21 +50,27 @@ class BackgroundCarousel extends React.Component {
     const { images } = this.props;
     const { selectedIndex } = this.state;
     return (
-      <View style={{ height: 160,marginHorizontal:10}}>
+      <View style={{ height: hp('30%'),width:wp('100%'),}}>
+        
         <ScrollView
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
           onMomentumScrollEnd={this.setSelectedIndex}
           ref={this.scrollRef}
+          contentContainerStyle={{alignItems: 'center'}}
         >
           {images.map(image => (
+           
+
+         
             <Image
               style={styles.backgroundImage}
               source={image}
               key={image}
-             
+             resizeMode='cover'
             />
+              
           ))}
         </ScrollView>
         <View style={styles.circleDiv}>
@@ -85,9 +92,11 @@ class BackgroundCarousel extends React.Component {
 
 const styles = StyleSheet.create({
   backgroundImage: {
- height:140,
- width: Dimensions.get('window').width,
-   
+ height:hp('25%'),
+ width: wp('100%'),
+ borderRadius:5,
+ 
+ 
   
    
   

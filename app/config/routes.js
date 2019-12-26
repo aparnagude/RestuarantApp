@@ -66,17 +66,19 @@ const FirstActivity_StackNavigator = createStackNavigator({
     screen: Home,
     navigationOptions: ({ navigation }) => ({
       title: 'Home',
-      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+    //  headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
      
       headerStyle: {
-        backgroundColor: color.primary,
+        backgroundColor: color.white,
+        elevation:0
       },
       headerTitleStyle: {
         fontFamily: string.fontLato,
         letterSpacing: 0.2,
         fontWeight: '100',
       },
-      headerTintColor: '#fff',
+      headerTintColor: color.black,
+      
     }),
   },
   Profile:{
@@ -85,7 +87,7 @@ const FirstActivity_StackNavigator = createStackNavigator({
       title: 'My Account',
      
       headerStyle: {
-        backgroundColor: color.primary,
+        backgroundColor: color.white,
         elevation:0,
       },
       headerTitleStyle: {
@@ -93,7 +95,7 @@ const FirstActivity_StackNavigator = createStackNavigator({
               letterSpacing: 0.2,
               fontWeight: '100',
             },
-      headerTintColor: '#fff',
+      headerTintColor: color.black,
     }),
   },
  NonVeg:{
@@ -102,7 +104,7 @@ const FirstActivity_StackNavigator = createStackNavigator({
       title: navigation.state.params.title,
      
       headerStyle: {
-        backgroundColor: color.primary,
+        backgroundColor: color.white,
         elevation:0,
       },
       headerTitleStyle: {
@@ -110,7 +112,7 @@ const FirstActivity_StackNavigator = createStackNavigator({
               letterSpacing: 0.2,
               fontWeight: '100',
             },
-      headerTintColor: '#fff',
+      headerTintColor: color.black,
     }),
   },
   Filter:{
@@ -147,7 +149,7 @@ const FirstActivity_StackNavigator = createStackNavigator({
       title: 'My Account',
      
       headerStyle: {
-        backgroundColor: color.primary,
+        backgroundColor: color.white,
         elevation:0,
       },
       headerTitleStyle: {
@@ -155,7 +157,7 @@ const FirstActivity_StackNavigator = createStackNavigator({
               letterSpacing: 0.2,
               fontWeight: '100',
             },
-      headerTintColor: '#fff',
+      headerTintColor: color.black,
     }),
   },
   CartListScreen:{
@@ -164,7 +166,7 @@ const FirstActivity_StackNavigator = createStackNavigator({
       title: 'Cart',
      
       headerStyle: {
-        backgroundColor: color.primary,
+        backgroundColor: color.white,
         elevation:0,
       },
       headerTitleStyle: {
@@ -172,7 +174,7 @@ const FirstActivity_StackNavigator = createStackNavigator({
               letterSpacing: 0.2,
               fontWeight: '100',
             },
-      headerTintColor: '#fff',
+      headerTintColor: color.black,
     }),
   },
   MyOrders:{
@@ -330,7 +332,7 @@ const AuthStack = createStackNavigator({
 const Router = createAppContainer(createSwitchNavigator(
     {
         Loading:{screen: Loading},
-        App: DrawerNavigatorExample, 
+        App: FirstActivity_StackNavigator, 
         Auth: AuthStack,
         
     }, 

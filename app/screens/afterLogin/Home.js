@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text,StatusBar,FlatList,ImageBackground,Image,StyleSheet,TouchableOpacity,ActivityIndicator} from 'react-native';
+import {View, Text,StatusBar,FlatList,TextInput,Image,StyleSheet,TouchableOpacity,ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import color from '../../design/colors';
 import string from '../../design/strings';
@@ -8,9 +8,9 @@ import {  ScrollView } from 'react-native-gesture-handler';
 import BackgroundCarousel from '../../components/BackgroundCarousel';
 import BottomBar from '../../components/BootomBar';
 import serverConfig from '../../config/serverConfig';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Icon2 from 'react-native-vector-icons/Ionicons';
-import Icon3 from 'react-native-vector-icons/Entypo';
+import Icon from 'react-native-vector-icons/EvilIcons';
+import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
+import Icon3 from 'react-native-vector-icons/Entypo'
 import Message from '../../components/Message';
 import Dialog, { DialogTitle,DialogButton, DialogContent ,DialogFooter,ScaleAnimation} from 'react-native-popup-dialog'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -106,7 +106,7 @@ this.tableData=this.tableData.bind(this);
      
       return {
       headerRight:<TouchableOpacity  onPress={ () => params.onPressSyncButton() }>
-      <Text style={{fontFamily:string.fontLato,color:color.white,marginRight:20}}>{"Table "+params.headerSubTitle}</Text>
+      <Text style={{fontFamily:string.fontLato,color:color.black,marginRight:20}}>{"Table "+params.headerSubTitle}</Text>
 
       </TouchableOpacity> 
       
@@ -114,7 +114,9 @@ this.tableData=this.tableData.bind(this);
          
       };
   };
-
+componentDidAppear(){
+  this.recomDishes();
+}
 
   tableList() {
     _this=this;
@@ -279,7 +281,7 @@ _this.setState({loader:true})
            "counter":this.state.counter[i],
            "totalAmount":this.state.totalprice,
            "price":this.state.ItemList[i].price,
-          
+          "image":this.state.ItemList[i].image,
      
            
            }
@@ -365,26 +367,30 @@ _this.setState({loader:true})
         this.props.navigation.navigate('Login');
     }
 
-    navigatetoScreen (route) {
-      console.warn(route)
-    if(route=='Veg'){
-      this.props.navigation.navigate('NonVeg',{itemType:'VEG',title:'Vegetarian'});
-
+    navigatetoScreen(route){
+      this.props.navigation.navigate(route)
     }
-    else  if(route=='NonVeg'){
-      this.props.navigation.navigate('NonVeg',{itemType:'NONVEG',title:'NonVegetarian'});
 
-    }
-    else  if(route=='Starter'){
-      this.props.navigation.navigate('NonVeg',{itemType:'STARTER',title:'Starters'});
+    // navigatetoScreen (route) {
+    //   console.warn(route)
+    // if(route=='Veg'){
+    //   this.props.navigation.navigate('NonVeg',{itemType:'VEG',title:'Vegetarian'});
 
-    }
-    else  if(route=='Dessert'){
-      this.props.navigation.navigate('NonVeg',{itemType:'DESSERT',title:'Desserts'});
+    // }
+    // else  if(route=='NonVeg'){
+    //   this.props.navigation.navigate('NonVeg',{itemType:'NONVEG',title:'NonVegetarian'});
 
-    }
+    // }
+    // else  if(route=='Starter'){
+    //   this.props.navigation.navigate('NonVeg',{itemType:'STARTER',title:'Starters'});
+
+    // }
+    // else  if(route=='Dessert'){
+    //   this.props.navigation.navigate('NonVeg',{itemType:'DESSERT',title:'Desserts'});
+
+    // }
       
-    }
+    // }
     selectTable = (item) => {
       // alert(item);
       console.warn(item);
@@ -403,7 +409,7 @@ _this.setState({loader:true})
     render(){
         return(
             <View style={styles.container}>
-                <StatusBar backgroundColor={color.primary} barStyle="default"/>
+            <StatusBar backgroundColor={'transparent'} barStyle="dark-content" />
               
 {
 this.state.loader?
@@ -412,6 +418,17 @@ this.state.loader?
 
 :
                <ScrollView showsVerticalScrollIndicator={false} style={{marginBottom:50}}>
+                   <View style={styles.rowContainer2}>
+                   <Icon name='search' size={30} style={{alignSelf:'center',padding:10,color:color.linecolor}}/>
+                <TextInput 
+                style={styles.textInput}
+                 placeholder='Search for Product' 
+                // onChangeText={text => this.searchFilterFunction(text)}
+                 placeholderTextColor={color.linecolor}/>   
+            
+               
+               
+              </View>
                 <View style={styles.secondContainer}>
                 <View style={{backgroundColor:color.white}}>
                 <BackgroundCarousel images={this.state.images} />
@@ -430,17 +447,23 @@ this.state.loader?
 
                 <View style={{flex:1,backgroundColor:color.white,marginHorizontal:4,marginVertical:4,flexDirection:'column'}}>
                   
-                  <View style={{position:'absolute',top:10,elevation:3,width:wp('25%'),height:hp('10%'),borderRadius:5,alignSelf:'center'}}>
-                  <Image style={{width:wp('25%'),height:hp('10%'),borderRadius:5}} source={require('../../assets/food_image.jpg')}/>
-                  </View>
-                   <View style={{borderRadius:5, width: wp('30%'),height: hp('13%'),elevation:3,marginTop:heights.by15}}>
-                  <View style={{flexDirection:'column',marginTop:heights.by25}}>
-                   <Text style={{fontFamily:string.fontLatoSemi,fontSize:hp('1.7%'),color:color.black,alignSelf:'flex-start',marginTop:10,marginHorizontal:10}} numberOfLines={2}>{item.itemName}</Text>
+                  <View style={{position:'absolute',top:10,elevation:3,width:wp('40%'),height:hp('15%'),borderRadius:5,alignSelf:'center'}}>
+                  {
+                  item.image===''||item.image===null?
+                  <Image style={{width:wp('40%'),height:hp('15%'),borderRadius:10}} source={require('../../assets/food_image.jpg')}/>
+                :
+                <Image style={{width:wp('40%'),height:hp('15%'),borderRadius:10}} source={{uri:item.image}}/>
+
+                }                 
+                 </View>
+                   <View style={{ width: wp('50%'),height: hp('18%'),elevation:2,marginTop:heights.by10,borderRadius:10,backgroundColor:color.white}}>
+                  <View style={{flexDirection:'column',marginTop:widths.by10,}}>
+                   <Text style={{fontFamily:string.fontLatoSemi,fontSize:hp('2.8%'),color:color.black,alignSelf:'flex-start',marginTop:10,marginHorizontal:10}} numberOfLines={2}>{item.itemName}</Text>
                    <View style={styles.rowContainer}>
-                   <TouchableOpacity style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,width:wp('13%')}}>
-                    <Text style={{fontFamily:string.fontLatoSemi,fontSize:hp('1.3%'),color:color.white,alignSelf:'center',paddingHorizontal:10}}>ADD</Text>
+                   <TouchableOpacity style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,width:wp('17%')}}>
+                    <Text style={{fontFamily:string.fontLatoSemi,fontSize:hp('2%'),color:color.white,alignSelf:'center',paddingHorizontal:10}}>ADD</Text>
                 </TouchableOpacity>
-            <Text style={{fontFamily:string.fontLatoSemi,fontSize: hp('1.7%') ,color:color.black,}}>{'\u20B9'+item.price}</Text>
+            <Text style={{fontFamily:string.fontLatoSemi,fontSize: hp('2.8%') ,color:color.black,}}>{'\u20B9'+item.price}</Text>
                
                  </View>
                  </View>
@@ -488,30 +511,36 @@ this.state.loader?
         showsHorizontalScrollIndicator={false}
         
         contentContainerStyle={this.state.visible==true?{marginBottom:50}:{marginBottom:0}}
-       numColumns={3}
+       numColumns={2}
         renderItem={({ item,index }) => 
 
 
-        <View style={{backgroundColor:color.white,marginHorizontal:4,marginVertical:4,flexDirection:'column'}}>
+        <View style={{marginHorizontal:4,marginVertical:4,flexDirection:'column'}}>
                   
-        <View style={{position:'absolute',top:10,elevation:3,width:wp('25%'),height:hp('10%'),borderRadius:5,alignSelf:'center'}}>
-        <Image style={{width:wp('25%'),height:hp('10%'),borderRadius:5}} source={require('../../assets/food_image.jpg')}/>
-        </View>
-         <View style={{borderRadius:5, width: wp('30%'),height: hp('13%'),elevation:3,marginTop:heights.by15}}>
-        <View style={{flexDirection:'column',marginTop:heights.by25}}>
-         <Text style={{fontFamily:string.fontLatoSemi,fontSize:hp('1.7%'),color:color.black,alignSelf:'flex-start',marginTop:10,marginHorizontal:10}} numberOfLines={2}>{item.itemName}</Text>
-         <View style={styles.rowContainer}>
+                  <View style={{position:'absolute',top:10,elevation:3,width:wp('40%'),height:hp('15%'),borderRadius:5,alignSelf:'center'}}>
+                {
+                  item.image===''||item.image===null?
+                  <Image style={{width:wp('40%'),height:hp('15%'),borderRadius:10}} source={require('../../assets/food_image.jpg')}/>
+                :
+                <Image style={{width:wp('40%'),height:hp('15%'),borderRadius:10}} source={{uri:item.image}}/>
+
+                }
+                  </View>
+                   <View style={{ width: wp('45%'),height: hp('18%'),elevation:2,marginTop:heights.by10,borderRadius:10,backgroundColor:color.white}}>
+                  <View style={{flexDirection:'column',marginTop:widths.by10,}}>
+                   <Text style={{fontFamily:string.fontLatoSemi,fontSize:hp('2.5%'),color:color.black,alignSelf:'flex-start',marginTop:10,marginHorizontal:10}} numberOfLines={2}>{item.itemName}</Text>
+                   <View style={styles.rowContainer}>
 
          {
                       this.state.counter[index]==0?
 
-                      <TouchableOpacity style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,width:wp('13%')}}
+                      <TouchableOpacity style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,width:wp('17%')}}
                       onPress={()=>this.incrementFunc(index,item.price)}>
-                      <Text style={{fontFamily:string.fontLatoSemi,fontSize:hp('1.3%'),color:color.white,alignSelf:'center',paddingHorizontal:10}}>ADD</Text>
+                      <Text style={{fontFamily:string.fontLatoSemi,fontSize:hp('2%'),color:color.white,alignSelf:'center',paddingHorizontal:10}}>ADD</Text>
                   </TouchableOpacity>
                   
                    :
-                   <View style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,width:wp('13%'),
+                   <View style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,width:wp('21%'),
                     flexDirection:'row',justifyContent:'space-between'}}>
                    <TouchableOpacity onPress={()=>this.decrementFunc(index,item.price)}> 
                   <Icon3 name="minus" size={20} color={color.white} /> 
@@ -528,7 +557,7 @@ this.state.loader?
 
 
         
-  <Text style={{fontFamily:string.fontLatoSemi,fontSize: hp('1.7%') ,color:color.black,}}>{'\u20B9'+item.price}</Text>
+  <Text style={{fontFamily:string.fontLatoSemi,fontSize: hp('2.5%') ,color:color.black,}}>{'\u20B9'+item.price}</Text>
      
        </View>
        </View>
@@ -653,11 +682,29 @@ flex:3}}>
                   :null
  }
                  <View>
-                 <BottomBar 
+                   <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',marginHorizontal:10,marginVertical:10}}>
+                   <TouchableOpacity style={styles.buttonConatiner}  
+                        onPress={() => this.navigatetoScreen('Home')}>
+                <Icon2 name="home" size={25} color={color.white} style={{padding:10,marginBottom:5,}}/>
+						</TouchableOpacity>
+            <TouchableOpacity style={[styles.buttonConatiner,{backgroundColor:color.white} ]}  
+                        onPress={() => this.navigatetoScreen('NonVeg')}>
+                <Icon2 name="grid" size={25} color={color.primary} style={{padding:10,marginBottom:5,}}/>
+						</TouchableOpacity>
+            <TouchableOpacity style={[styles.buttonConatiner,{backgroundColor:color.white} ]} 
+                         onPress={()=>this.nextScreen()}>
+                <Icon name="cart" size={35} color={color.primary} style={{padding:10,marginBottom:5,}}/>
+						</TouchableOpacity>
+            <TouchableOpacity style={[styles.buttonConatiner,{backgroundColor:color.white} ]}
+                        onPress={() => this.navigatetoScreen('EditProfile')}>
+                <Icon2 name="user" size={25} color={color.primary} style={{padding:10,marginBottom:5,}}/>
+						</TouchableOpacity>
+                   </View>
+                 {/* <BottomBar 
                 
                 onPressDetails={(key) =>this.navigatetoScreen(key)} 
       
-                  bottomList={this.state.bottomList}/>
+                  bottomList={this.state.bottomList}/> */}
                   </View> 
                 </View>
             </View>
@@ -669,11 +716,45 @@ export default Home;
 const styles = StyleSheet.create({
     container: { 
       flex: 1, 
-      backgroundColor: "white",
+      backgroundColor: color.white,
       justifyContent:'center',
       marginHorizontal:10
      },
+     buttonConatiner:{
+     backgroundColor:color.primaryColor,
+     borderTopLeftRadius:25,
+     borderTopRightRadius:25,
+      alignSelf:'center',
+      marginBottom:-10
+     
+    
+  },
+  rowContainer2:{
+    flexDirection:'row',
+    marginHorizontal:20,
+    
+    borderRadius:20,
+   elevation:5,
+    alignSelf:'center',
+  marginVertical:10,
+    alignItems:'center',
+    backgroundColor:color.white,
+    width:wp('90%')
+  },
+  textInput:{
+    alignSelf:'center',
+  padding:10,
+  fontSize:hp('2.5%'),
+  marginRight:10,
+ 
+  color:color.black,
+  width:'80%',
+  alignContent:'center',
+  justifyContent:'center',
+  fontFamily:string.fontLatoMed
   
+  
+  },
 secondContainer:{
   flex:1,
   alignItems:'center',
@@ -683,7 +764,7 @@ secondContainer:{
 headingText:{
   fontFamily:string.fontLato,
   color:color.black,
-  fontSize:hp('1.8%'),
+  fontSize:hp('2.5%'),
   alignSelf:'flex-start',
   marginHorizontal:10,
 marginTop:20,

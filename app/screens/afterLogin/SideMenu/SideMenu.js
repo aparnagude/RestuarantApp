@@ -4,7 +4,7 @@ import {NavigationActions} from 'react-navigation';
 import {ScrollView, Text, View,StyleSheet,TouchableOpacity,Image,Platform,ImageBackground} from 'react-native';
 import { DrawerActions } from 'react-navigation-drawer';
 import Icon from 'react-native-vector-icons/EvilIcons';
-import Icon2 from 'react-native-vector-icons/AntDesign';
+import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import Icon3 from 'react-native-vector-icons/Entypo'
 import string from '../../../design/strings';
 import color from '../../../design/colors';

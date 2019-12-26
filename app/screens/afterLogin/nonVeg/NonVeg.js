@@ -277,26 +277,29 @@ allDishes = ()  => {
       
       
 
-           navigatetoScreen (route) {
-            console.warn(route)
-          if(route=='Veg'){
-            this.props.navigation.push('NonVeg',{itemType:'VEG',title:'Vegetarian'});
-      
+           navigatetoScreen(route){
+            this.props.navigation.navigate(route)
           }
-          else  if(route=='NonVeg'){
-            this.props.navigation.push('NonVeg',{itemType:'NONVEG',title:'NonVegetarian'});
+          //  navigatetoScreen (route) {
+          //   console.warn(route)
+          // if(route=='Veg'){
+          //   this.props.navigation.push('NonVeg',{itemType:'VEG',title:'Vegetarian'});
       
-          }
-          else  if(route=='Starter'){
-            this.props.navigation.push('NonVeg',{itemType:'STARTER',title:'Starters'});
+          // }
+          // else  if(route=='NonVeg'){
+          //   this.props.navigation.push('NonVeg',{itemType:'NONVEG',title:'NonVegetarian'});
       
-          }
-          else  if(route=='Dessert'){
-            this.props.navigation.push('NonVeg',{itemType:'DESSERT',title:'Desserts'});
+          // }
+          // else  if(route=='Starter'){
+          //   this.props.navigation.push('NonVeg',{itemType:'STARTER',title:'Starters'});
       
-          }
+          // }
+          // else  if(route=='Dessert'){
+          //   this.props.navigation.push('NonVeg',{itemType:'DESSERT',title:'Desserts'});
+      
+          // }
             
-          }
+          // }
 
 render(){
     return(
@@ -411,11 +414,31 @@ flex:3}}>
                   :null
  }
                  <View>
-                 <BottomBar 
+
+<View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',marginHorizontal:10,marginVertical:10}}>
+                   <TouchableOpacity style={[styles.buttonConatiner,{backgroundColor:color.white} ]}  
+                        onPress={() => this.navigatetoScreen('Home')}>
+                <Icon2 name="home" size={25} color={color.primary} style={{padding:10,marginBottom:5,}}/>
+						</TouchableOpacity>
+            <TouchableOpacity style={[styles.buttonConatiner,{backgroundColor:color.primaryColor} ]}  
+                        onPress={() => this.navigatetoScreen('NonVeg')}>
+                <Icon2 name="grid" size={25} color={color.white} style={{padding:10,marginBottom:5,}}/>
+						</TouchableOpacity>
+            <TouchableOpacity style={[styles.buttonConatiner,{backgroundColor:color.white} ]} 
+                        onPress={() => this.navigatetoScreen('CartListScreen')}>
+                <Icon name="cart" size={35} color={color.primary} style={{padding:10,marginBottom:5,}}/>
+						</TouchableOpacity>
+            <TouchableOpacity style={[styles.buttonConatiner,{backgroundColor:color.primaryColor} ]}
+                        onPress={() => this.navigatetoScreen('EditProfile')}>
+                <Icon2 name="user" size={25} color={color.primary} style={{padding:10,marginBottom:5,}}/>
+						</TouchableOpacity>
+                   </View>
+       
+                 {/* <BottomBar 
                 
                 onPressDetails={(key) =>this.navigatetoScreen(key)} 
       
-                  bottomList={this.state.bottomList}/>
+                  bottomList={this.state.bottomList}/> */}
                   </View> 
                 </View>
 

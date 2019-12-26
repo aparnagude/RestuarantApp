@@ -8,6 +8,9 @@ import window, { heights, widths } from '../../../design/dimen';
 import AsyncStorage from '@react-native-community/async-storage';
 import serverConfig from '../../../config/serverConfig';
 import Message from '../../../components/Message';
+import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
+import Icon from 'react-native-vector-icons/EvilIcons';
+
 class EditProfile extends Component {
 
   constructor(props){
@@ -38,6 +41,10 @@ class EditProfile extends Component {
     this.getProfile();
   }
    
+
+  navigatetoScreen(route){
+    this.props.navigation.navigate(route)
+  }
   getProfile = ()  => {
         this.setState({loader:true});    
     var url = serverConfig.baseUrl+'api/users/profile/'+this.state.mobile;
@@ -193,6 +200,12 @@ Obj.displayAlert(data.message);
                
             }
          }
+         _bootstrap = async () => {
+     
+
+          await AsyncStorage.clear();
+          this.props.navigation.navigate('Login');
+      }
 
   render() {
       return(
@@ -265,6 +278,29 @@ this.state.loader?
        </View>
        </ScrollView>
        }
+<View style={styles.bottomContainer}>
+  <View style={{marginHorizontal:10}}>
+    <Text onPress={()=>this._bootstrap()}>Logout</Text>
+<View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',marginHorizontal:10,marginVertical:10}}>
+                   <TouchableOpacity style={[styles.buttonConatiner,{backgroundColor:color.white} ]}  
+                        onPress={() => this.navigatetoScreen('Home')}>
+                <Icon2 name="home" size={25} color={color.primary} style={{padding:10,marginBottom:5,}}/>
+						</TouchableOpacity>
+            <TouchableOpacity style={[styles.buttonConatiner,{backgroundColor:color.white} ]}  
+                        onPress={() => this.navigatetoScreen('NonVeg')}>
+                <Icon2 name="grid" size={25} color={color.primary} style={{padding:10,marginBottom:5,}}/>
+						</TouchableOpacity>
+            <TouchableOpacity style={[styles.buttonConatiner,{backgroundColor:color.white} ]} 
+                        onPress={() => this.navigatetoScreen('CartListScreen')}>
+                <Icon name="cart" size={35} color={color.primary} style={{padding:10,marginBottom:5,}}/>
+						</TouchableOpacity>
+            <TouchableOpacity style={[styles.buttonConatiner,{backgroundColor:color.primaryColor} ]}
+                        onPress={() => this.navigatetoScreen('EditProfile')}>
+                <Icon2 name="user" size={25} color={color.white} style={{padding:10,marginBottom:5,}}/>
+						</TouchableOpacity>
+                   </View>
+       </View>
+       </View>
        </View>
       );
   }
@@ -283,6 +319,24 @@ const styles=StyleSheet.create({
         alignSelf:'center',
         marginBottom:20
         
+    },
+    buttonConatiner:{
+      backgroundColor:color.primaryColor,
+      borderTopLeftRadius:25,
+      borderTopRightRadius:25,
+       alignSelf:'center',
+       marginBottom:-10
+      
+     
+   },
+    bottomContainer:{
+      position:'absolute',
+      bottom:0,
+      left:-10,
+      right:-10,
+      backgroundColor:color.white,
+      elevation:5,
+      flexDirection:'column'
     },
     avatar: {
       alignSelf: 'center',

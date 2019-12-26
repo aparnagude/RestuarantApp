@@ -8,7 +8,8 @@ const color={
     gcolor:'#d34836',
     linecolor:'#C1B9BA',
     primary:'#566573',
-    light:'#E7E7E7'
+    light:'#E7E7E7',
+    green:'#b1c61a',
 }
 
 export default color;
