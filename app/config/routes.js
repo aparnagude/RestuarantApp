@@ -100,20 +100,24 @@ const FirstActivity_StackNavigator = createStackNavigator({
   },
  NonVeg:{
     screen:NonVeg,
-    navigationOptions: ({ navigation }) => ({
-      title: navigation.state.params.title,
+    // navigationOptions: ({ navigation }) => ({
+    //   title: navigation.state.params.title,
      
-      headerStyle: {
-        backgroundColor: color.white,
-        elevation:0,
-      },
-      headerTitleStyle: {
-              fontFamily: string.fontLato,
-              letterSpacing: 0.2,
-              fontWeight: '100',
-            },
-      headerTintColor: color.black,
-    }),
+    //   headerStyle: {
+    //     backgroundColor: color.white,
+    //     elevation:0,
+    //   },
+    //   headerTitleStyle: {
+    //           fontFamily: string.fontLato,
+    //           letterSpacing: 0.2,
+    //           fontWeight: '100',
+    //         },
+    //   headerTintColor: color.black,
+    // }),
+    navigationOptions: {
+              header: () => null,
+              },
+      
   },
   Filter:{
     screen:Filter,

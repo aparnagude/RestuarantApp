@@ -337,11 +337,12 @@ this.state.loading?
       <View style={{width:wp('100%'),alignItems:'center',flexDirection:'row',marginHorizontal:4,marginVertical:4,}}>
                   
       <View style={{position:'absolute',top:20,width:wp('30%'),height:hp('12%'),borderRadius:5,alignSelf:'center',elevation:3}}>
-     {  item.image==''||item.image=='null'?
+    { 
+    //  item.image==''||item.image=='null'?
            <Image style={{width:wp('30%'),height:hp('12%'),borderRadius:10}} source={require('../../../assets/food_image.jpg')}/>
-         :
-         <Image style={{width:wp('30%'),height:hp('12%'),borderRadius:10}} source={{uri:item.image}}/>
-        }
+        //  :
+        //  <Image style={{width:wp('30%'),height:hp('12%'),borderRadius:10}} source={{uri:item.image}}/>
+       }
       </View>
        <View style={{ width:wp('80%'),height: hp('18%'),elevation:0,backgroundColor:color.white,marginHorizontal:10,alignSelf:'center',marginLeft:heights.by15,borderRadius:10,
       borderColor:color.green,borderWidth:0.5,

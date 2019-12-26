@@ -449,10 +449,11 @@ this.state.loader?
                   
                   <View style={{position:'absolute',top:10,elevation:3,width:wp('40%'),height:hp('15%'),borderRadius:5,alignSelf:'center'}}>
                   {
-                  item.image===''||item.image===null?
-                  <Image style={{width:wp('40%'),height:hp('15%'),borderRadius:10}} source={require('../../assets/food_image.jpg')}/>
-                :
-                <Image style={{width:wp('40%'),height:hp('15%'),borderRadius:10}} source={{uri:item.image}}/>
+                //    String(item.image)==null?
+                //    // item.image===''||item.image===null?
+             <Image style={{width:wp('40%'),height:hp('15%'),borderRadius:10}} source={require('../../assets/food_image.jpg')}/>
+                // :
+               // <Image style={{width:wp('40%'),height:hp('15%'),borderRadius:10}} source={{uri:item.image}}/>
 
                 }                 
                  </View>
@@ -519,10 +520,14 @@ this.state.loader?
                   
                   <View style={{position:'absolute',top:10,elevation:3,width:wp('40%'),height:hp('15%'),borderRadius:5,alignSelf:'center'}}>
                 {
-                  item.image===''||item.image===null?
+
+              
+              //  String(item.image)==null?
+                //  item.image===''||item.image===null?
                   <Image style={{width:wp('40%'),height:hp('15%'),borderRadius:10}} source={require('../../assets/food_image.jpg')}/>
-                :
-                <Image style={{width:wp('40%'),height:hp('15%'),borderRadius:10}} source={{uri:item.image}}/>
+                // :
+               // <Image style={{width:wp('40%'),height:hp('15%'),borderRadius:10}} source={{uri:item.image}}/>
+
 
                 }
                   </View>

@@ -10,7 +10,7 @@ import serverConfig from '../../../config/serverConfig';
 import Message from '../../../components/Message';
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import Icon from 'react-native-vector-icons/EvilIcons';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 class EditProfile extends Component {
 
   constructor(props){
@@ -217,7 +217,7 @@ this.state.loader?
 
 :
       
-          <ScrollView>
+          <ScrollView contentContainerStyle={{paddingBottom:60}}>
 
              <View style={{backgroundColor:color.white,width:'100%',height:100,justifyContent:'center',marginTop:20}}>
                   <TouchableOpacity style={styles.avatar}>
@@ -263,6 +263,13 @@ this.state.loader?
           secureTextEntry={true}
           
         />
+          </View>
+          <View style={[styles.SecondContainer,{marginBottom:10,paddingBottom:0}]}>
+          <Text onPress={()=>this._bootstrap()} style={{fontSize:hp('2.5%'),fontFamily:string.fontLatoMed,paddingHorizontal:10,paddingVertical:5}}>Logout</Text>
+          <Text onPress={()=>this.props.navigation.navigate('MyOrders')} style={{fontSize:hp('2.5%'),fontFamily:string.fontLatoMed,paddingHorizontal:10,paddingVertical:5}}>My Orders</Text>
+
+
+          </View>
             {
           this.state.loading?
           <View style={baseStyle.loadingStyle}>
@@ -273,14 +280,13 @@ this.state.loader?
                <Text style={baseStyle.buttonText}>SAVE</Text>
            </TouchableOpacity>
   }
-         
 
-       </View>
+
+     
        </ScrollView>
        }
 <View style={styles.bottomContainer}>
   <View style={{marginHorizontal:10}}>
-    <Text onPress={()=>this._bootstrap()}>Logout</Text>
 <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',marginHorizontal:10,marginVertical:10}}>
                    <TouchableOpacity style={[styles.buttonConatiner,{backgroundColor:color.white} ]}  
                         onPress={() => this.navigatetoScreen('Home')}>
@@ -312,12 +318,15 @@ const styles=StyleSheet.create({
        
     SecondContainer: {
         flex:1,
-        width:'100%',
+        width:'90%',
        
         marginHorizontal:10,
         position:'relative',
         alignSelf:'center',
-        marginBottom:20
+        marginBottom:20,
+        elevation:3,
+        borderRadius:5,
+        paddingBottom:20,
         
     },
     buttonConatiner:{

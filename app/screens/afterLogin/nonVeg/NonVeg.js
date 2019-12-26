@@ -5,9 +5,10 @@ import { HeaderBackButton } from 'react-navigation-stack';
 import {ScrollView, Text, View,StyleSheet,TouchableOpacity,Image,
   Platform,ImageBackground,StatusBar,FlatList,ActivityIndicator} from 'react-native';
 import { DrawerActions } from 'react-navigation-drawer';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Icon2 from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/EvilIcons';
+import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import Icon3 from 'react-native-vector-icons/Entypo'
+import Icon4 from 'react-native-vector-icons/Ionicons'
 import string from '../../../design/strings';
 import color from '../../../design/colors';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -15,7 +16,8 @@ import window, { heights, widths } from '../../../design/dimen';
 import baseStyle from '../../../design/styles';
 import BottomBar from '../../../components/BootomBar';
 import serverConfig from '../../../config/serverConfig';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import Dialog, { DialogTitle,DialogButton, DialogContent ,DialogFooter,ScaleAnimation} from 'react-native-popup-dialog'
 
 class NonVeg extends Component {
 constructor(props){
@@ -33,35 +35,36 @@ constructor(props){
         bottomList: [
             {
               id: 'Veg',
-              name: 'Veg',
+              name: 'VEG',
               image:require('../../../assets/veg.png')
             },
             {
               id: 'NonVeg',
-              name: 'Non Veg',
+              name: 'NONVEG',
               image:require('../../../assets/non_Veg.png')
             },
             {
               id: 'Starter',
-              name: 'Starters',
+              name: 'STARTER',
               image:require('../../../assets/veg.png')
             },
             {
               id: 'Dessert',
-              name: 'Desserts',
+              name: 'DESSERT',
               image:require('../../../assets/dessert.png')
             },
             
           ],
           token:'',
           userId:'',
-          itemType:'',
+          itemType:'VEG',
           loading:false,
           counter: [],
           count:0,
           visible:false,
           btprice:[],
           totalprice:0,
+          restDialog:false,
          
     }
 }
@@ -84,6 +87,14 @@ async componentWillMount(){
 
   }
 
+  selectVilage = (item) => {
+    // alert(item);
+     this.setState({
+       restDialog: false,
+       itemType:item
+       });
+       this.allDishes();
+ }
 allDishes = ()  => {
      
           
@@ -304,12 +315,21 @@ allDishes = ()  => {
 render(){
     return(
              <View style={styles.MainContainer}>
-                <StatusBar backgroundColor={color.primary} barStyle="default"/>
+                <StatusBar backgroundColor={'transparent'} barStyle="dark-content" />
+                <View style={{backgroundColor:color.white,flexDirection:'row',padding:10,width:'100%',justifyContent:'space-between'}}>
+                <TouchableOpacity style={{alignSelf:'flex-end'}} onPress={()=>this.props.navigation.goBack(null)}>   
+                         <Icon4 name='md-arrow-back' size={25} style={{alignSelf:'center',color:color.black}} />
+                    </TouchableOpacity>
+                    <Text style={{fontFamily:string.fontLatoMed,fontSize:hp('3%'),alignSelf:'center'}}>Vegetarian</Text>
+                    <TouchableOpacity style={{alignSelf:'flex-end'}} onPress={()=>this.setState({restDialog:true})}>   
+                         <Icon3 name='dots-three-vertical' size={25} style={{alignSelf:'center',color:color.black}} />
+                    </TouchableOpacity>
+                    </View>
                 {
                    this.state.loading?
                    <ActivityIndicator color={color.primaryColor} size='large' style={{justifyContent:'center', alignItems:'center', alignSelf:'center',marginTop:heights.by2half}}/> 
                    : 
-                  
+                
                 <View style={{marginBottom:20,backgroundColor:color.white}}>
                   
                    
@@ -428,7 +448,7 @@ flex:3}}>
                         onPress={() => this.navigatetoScreen('CartListScreen')}>
                 <Icon name="cart" size={35} color={color.primary} style={{padding:10,marginBottom:5,}}/>
 						</TouchableOpacity>
-            <TouchableOpacity style={[styles.buttonConatiner,{backgroundColor:color.primaryColor} ]}
+            <TouchableOpacity style={[styles.buttonConatiner,{backgroundColor:color.white} ]}
                         onPress={() => this.navigatetoScreen('EditProfile')}>
                 <Icon2 name="user" size={25} color={color.primary} style={{padding:10,marginBottom:5,}}/>
 						</TouchableOpacity>
@@ -441,6 +461,46 @@ flex:3}}>
                   bottomList={this.state.bottomList}/> */}
                   </View> 
                 </View>
+                <Dialog
+       visible={this.state.restDialog}
+       width={widths.nintyper}
+       dialogTitle={<DialogTitle textStyle={{color: color.primaryColor,fontSize: heights.dp12, fontFamily: string.fontLato}} title="Select Item Type" />}
+       footer={
+        <DialogFooter> 
+          <DialogButton
+          text="Cancel"
+          textStyle={{color: color.black,fontSize: widths.by25, fontFamily: string.fontLatoMed}}
+          onPress={() => {
+          this.setState({ restDialog: false });
+          }}
+          key="cancelBtn"
+          />
+          </DialogFooter>
+     
+          }
+       onTouchOutside={() => {
+         this.setState({ restDialog: false });
+       }}
+       onHardwareBackPress={() => {
+         this.setState({ restDialog: false });
+        }}
+     >
+       <DialogContent>
+      <FlatList
+       data={this.state.bottomList}
+       ItemSeparatorComponent={this.renderSeparator}
+       renderItem={({ item }) => (
+   <TouchableOpacity key={`${item.id}`} onPress={() => this.selectVilage(item.name)} style={{padding:10}}>
+   
+        <Text style={{fontSize:16, color: color.primary, fontFamily: string.fontLatoMed}}>{`${item.name}`}</Text>
+       
+   </TouchableOpacity>
+   
+          )}
+       />
+      
+       </DialogContent>
+     </Dialog>
 
              </View>
     );
@@ -457,6 +517,15 @@ const styles=StyleSheet.create({
 row: {
   flex: 1,
   justifyContent: "space-between"
+},
+buttonConatiner:{
+  backgroundColor:color.primaryColor,
+  borderTopLeftRadius:25,
+  borderTopRightRadius:25,
+   alignSelf:'center',
+   marginBottom:-10
+  
+ 
 },
 topbarContainer:{
     position:'absolute',
