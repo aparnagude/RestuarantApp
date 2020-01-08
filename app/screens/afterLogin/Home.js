@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text,StatusBar,FlatList,TextInput,Image,StyleSheet,TouchableOpacity,ActivityIndicator} from 'react-native';
+import {View, Text,StatusBar,FlatList,TextInput,Image,StyleSheet,TouchableOpacity,ActivityIndicator,BackHandler} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import color from '../../design/colors';
 import string from '../../design/strings';
@@ -78,8 +78,30 @@ this.tableData=this.tableData.bind(this);
     }
   
 
-   async componentDidMount(){
 
+    onButtonPress = () => {
+      BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+      // then navigate
+      navigate('NewScreen');
+    }
+    
+   
+    
+   
+    
+    componentWillUnmount() {
+      BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+
+
+ handleBackButton = () => {
+  BackHandler.exitApp()
+      return true;
+    } 
+
+   async componentDidMount(){
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     const userToken = await AsyncStorage.getItem('auth');
     const tableId = await AsyncStorage.getItem('tableNo');
 
@@ -265,7 +287,7 @@ _this.setState({loader:true})
 
     nextScreen(){
       // this._toggleBottomNavigationView();
-     // this.setState({ visible: false });
+      this.setState({ visible: false });
       var fArray = new Array();
       for(i=0;i<this.state.ItemList.length;i++){
         console.warn(this.state.ItemList[i].itemName,this.state.ItemList[i].itemId,this.state.ItemList[i].itemType)
@@ -318,7 +340,7 @@ _this.setState({loader:true})
                   'userId':_this.state.userId
                  }
                }).then( function(response) {
-                _this.setState({loader:false});
+                
                 if (response.status == 200) {
                  
                 
@@ -334,8 +356,11 @@ _this.setState({loader:true})
                      
                       _this.setState({counter:count});
                     }
-                   
-                      _this.setState({ItemList:data,popularList:data});
+                   setTimeout(() => {
+                    _this.setState({ItemList:data,popularList:data});
+                    _this.setState({loader:false});
+                   }, 1000);
+                     
                     });
                   
                 
@@ -443,17 +468,17 @@ this.state.loader?
         horizontal={true}
         showsHorizontalScrollIndicator={false}
 
-        renderItem={({ item }) => 
+        renderItem={({ item,index }) => 
 
                 <View style={{flex:1,backgroundColor:color.white,marginHorizontal:4,marginVertical:4,flexDirection:'column'}}>
                   
                   <View style={{position:'absolute',top:10,elevation:3,width:wp('40%'),height:hp('15%'),borderRadius:5,alignSelf:'center'}}>
                   {
-                //    String(item.image)==null?
-                //    // item.image===''||item.image===null?
+                   item.image==null?
+                
              <Image style={{width:wp('40%'),height:hp('15%'),borderRadius:10}} source={require('../../assets/food_image.jpg')}/>
-                // :
-               // <Image style={{width:wp('40%'),height:hp('15%'),borderRadius:10}} source={{uri:item.image}}/>
+                 :
+               <Image style={{width:wp('40%'),height:hp('15%'),borderRadius:10}} source={{uri:item.image+""}}/>
 
                 }                 
                  </View>
@@ -461,6 +486,7 @@ this.state.loader?
                   <View style={{flexDirection:'column',marginTop:widths.by10,}}>
                    <Text style={{fontFamily:string.fontLatoSemi,fontSize:hp('2.8%'),color:color.black,alignSelf:'flex-start',marginTop:10,marginHorizontal:10}} numberOfLines={2}>{item.itemName}</Text>
                    <View style={styles.rowContainer}>
+                  
                    <TouchableOpacity style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,width:wp('17%')}}>
                     <Text style={{fontFamily:string.fontLatoSemi,fontSize:hp('2%'),color:color.white,alignSelf:'center',paddingHorizontal:10}}>ADD</Text>
                 </TouchableOpacity>
@@ -522,11 +548,11 @@ this.state.loader?
                 {
 
               
-              //  String(item.image)==null?
-                //  item.image===''||item.image===null?
+               item.image==null?
+              
                   <Image style={{width:wp('40%'),height:hp('15%'),borderRadius:10}} source={require('../../assets/food_image.jpg')}/>
-                // :
-               // <Image style={{width:wp('40%'),height:hp('15%'),borderRadius:10}} source={{uri:item.image}}/>
+                 :
+                <Image style={{width:wp('40%'),height:hp('15%'),borderRadius:10}} source={{uri:item.image+""}}/>
 
 
                 }
@@ -629,9 +655,9 @@ this.state.loader?
        visible={this.state.tableDialog}
        width={widths.nintyper}
        style={{backgroundColor:color.white}}
-       dialogTitle={<DialogTitle textStyle={{color: color.primaryColor,fontSize: heights.dp12, fontFamily: string.fontLato}} title="Select Table" />}
+       dialogTitle={<DialogTitle textStyle={{color: color.primaryColor,fontSize: heights.dp12, fontFamily: string.fontLato,}} title="Select Table" />}
        footer={
-        <DialogFooter> 
+        <DialogFooter style={{backgroundColor:color.white}}> 
           <DialogButton
           text="Cancel"
           textStyle={{color: color.black,fontSize: widths.by25, fontFamily: string.fontLatoMed}}
@@ -650,7 +676,7 @@ this.state.loader?
          this.setState({ tableDialog: false });
         }}
      >
-       <DialogContent>
+       <DialogContent style={{backgroundColor:color.white}}>
       <FlatList
        data={this.state.tableArray}
        ItemSeparatorComponent={this.renderSeparator}

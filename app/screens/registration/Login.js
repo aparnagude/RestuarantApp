@@ -90,8 +90,14 @@ class Login extends Component {
                   var profile = data['tokenPk']['user'];
                   console.warn('----',profile);
                   AsyncStorage.setItem('user',JSON.stringify(data['tokenPk']['user']));
+                if(profile.userType=='kitchen'){
+                  _this.props.navigation.navigate('KitchenOrders');
+                }
+                else{
                   _this.props.navigation.navigate('Home');
 
+                }
+                  
                 });
               
                
@@ -139,10 +145,10 @@ class Login extends Component {
            <Image source={require('./../../assets/main_background.jpg')} resizeMode='cover' style={baseStyle.ImageBackground}></Image>
            <View style={baseStyle.overlay} />
 
-           <View style={baseStyle.CircleImage}>
+           {/* <View style={baseStyle.CircleImage}>
               <Image source={require('./../../assets/fork.png')} resizeMode='contain' style={baseStyle.logoImage}></Image>
           
-          </View>
+          </View> */}
        </View>
        <View style={styles.SecondContainer}>
 
@@ -201,7 +207,7 @@ const styles=StyleSheet.create({
     SecondContainer: {
         flex:1,
         width:'100%',
-        marginTop:50,
+        marginTop:60,
         marginHorizontal:10,
         position:'relative',
         alignSelf:'center',

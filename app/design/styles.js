@@ -2,6 +2,7 @@ import { StyleSheet, Platform } from 'react-native';
 import window, { IMAGE_HEIGHT, IMAGE_HEIGHT_SMALL, button, heights, widths } from './dimen';
 import color from './colors';
 import string from './strings';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
  const baseStyle=StyleSheet.create({
     MainContainer:{
@@ -10,8 +11,9 @@ import string from './strings';
        
     },
     Background: {
-        width:'100%',
-        height:250,
+        width:wp('100%'),
+        height:hp('30%'),
+     
        
     },
     ImageBackground: {

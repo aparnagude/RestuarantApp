@@ -75,7 +75,13 @@ export default class ExpandableKitComponent extends Component {
  
         </View>
       <View style={{flexDirection:'row',marginHorizontal:widths.dp10 }}>
-      <Image source={require('../../../assets/food_image.jpg')} style={{ height:heights.by6,width:heights.by6, resizeMode: 'contain',borderBottomLeftRadius:4,borderTopLeftRadius:4,borderBottomRightRadius:4,borderTopRightRadius:4}} />
+        {
+          item.imageName==null?
+          <Image source={require('../../../assets/food_image.jpg')} style={{ height:heights.by6,width:heights.by6, resizeMode: 'contain',borderBottomLeftRadius:4,borderTopLeftRadius:4,borderBottomRightRadius:4,borderTopRightRadius:4}} />
+          :
+          <Image source={{uri:item.imageName+""}} style={{ height:heights.by6,width:heights.by6,borderBottomLeftRadius:4,borderTopLeftRadius:4,borderBottomRightRadius:4,borderTopRightRadius:4,marginLeft:-6}} />
+
+        }
         <View style={{flexDirection:'column',marginHorizontal:widths.dp10,alignSelf:'center'}}>
         <Text style={[{alignSelf:'flex-start',color:color.primaryColor,fontFamily:string.fontLato,fontSize:widths.dp18,fontWeight:'900',marginBottom:5}]}>{item.itemName}</Text>
         <Text style={[{alignSelf:'flex-start',color:color.black,fontFamily:string.fontLatoSemi,marginBottom:5,fontSize:widths.dp16}]}>{'\u20B9 '+item.price+' | Qty: '+item.quantity}</Text>

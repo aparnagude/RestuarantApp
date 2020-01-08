@@ -3,7 +3,7 @@ import { StyleSheet, View, StatusBar, TextInput, Text, ScrollView, TouchableOpac
 import color from '../design/colors';
 import baseStyle from '../design/styles';
 import string from '../design/strings'
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 class FloatingLabelInput extends Component {
     state = {
       isFocused: false,
@@ -58,7 +58,7 @@ class FloatingLabelInput extends Component {
        
       };
       return (
-        <View style={{ paddingTop: 25,   width:'100%', marginVertical:5}}>
+        <View style={{ paddingTop: 25,  width:wp('95%'), marginVertical:10,elevation:3,borderRadius:5,marginHorizontal:10}}>
           <Animated.Text style={labelStyle}>
             {label}
           </Animated.Text>
@@ -72,7 +72,7 @@ class FloatingLabelInput extends Component {
             editable={this.props.editable}
             blurOnSubmit
           />
-          <View  style={{backgroundColor:color.linecolor,height:1,marginHorizontal:20}}/>
+          {/* <View  style={{backgroundColor:color.linecolor,height:1,marginHorizontal:20}}/> */}
         </View>
       );
     }

@@ -7,11 +7,13 @@ import { widths,heights } from '../../design/dimen';
 import string from '../../design/strings';
 import baseStyle from '../../design/styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon2 from 'react-native-vector-icons/FontAwesome';
+
 import FloatingLabelInput from '../../components/FloatingLabelInput';
 import serverConfig from '../../config/serverConfig';
 import Message from '../../components/Message'
 import Dialog, { DialogTitle,DialogButton, DialogContent ,DialogFooter,ScaleAnimation} from 'react-native-popup-dialog'
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 class SignUp extends Component {
     constructor(props){
         super(props);
@@ -27,6 +29,7 @@ class SignUp extends Component {
             restArray:[],
             restDialog:false,
             loader:false,
+            termsAgreed:''
           
         }
     }
@@ -72,6 +75,9 @@ else if(this.state.restuarantName === "" || this.state.restuarantName === null) 
     }
     else if(this.state.password!=this.state.cnfrmpswd){
       Obj.displayAlert('Password not matched');
+    }
+    else if(this.state.termsAgreed==''){
+      Obj.displayAlert('Please select user type');
     }
      
       else {
@@ -145,7 +151,9 @@ else if(this.state.restuarantName === "" || this.state.restuarantName === null) 
             "mobileNumber": this.state.mobile,
             "pin": this.state.password,
             "confirmPin": this.state.cnfrmpswd,
-            "restName": this.state.restuarantName
+            "restName": this.state.restuarantName,
+            "userType":this.state.termsAgreed,
+            "mtoken":""
           }
         
            
@@ -207,6 +215,16 @@ else if(this.state.restuarantName === "" || this.state.restuarantName === null) 
        restuarantName:item
        })
  }
+ changeTermsCond = (item) => {
+
+    this.setState({
+      termsAgreed: item,
+      });
+    
+ 
+  
+
+}
 
     render(){
         return(
@@ -215,14 +233,16 @@ else if(this.state.restuarantName === "" || this.state.restuarantName === null) 
 
 
        <ScrollView>
-       <View style={baseStyle.Background}>
-           <Image source={require('./../../assets/main_background.jpg')} resizeMode='cover' style={baseStyle.ImageBackground}></Image>
-           <View style={baseStyle.overlay} />
+       <View style={[baseStyle.Background,{   backgroundColor:color.primaryColor}]}>
+       <Text numberOfLines={2} style={[baseStyle.smallText,{color:color.white,fontSize:hp('2.7%'),marginTop:heights.by8,marginHorizontal:widths.by10}]}>Create a account with new phone number</Text>
 
-           <View style={baseStyle.CircleImage}>
+           {/* <Image source={require('./../../assets/main_background.jpg')} resizeMode='cover' style={baseStyle.ImageBackground}></Image> */}
+           {/* <View style={baseStyle.overlay} /> */}
+
+           {/* <View style={baseStyle.CircleImage}>
               <Image source={require('./../../assets/fork.png')} resizeMode='contain' style={baseStyle.logoImage}></Image>
           
-          </View>
+          </View> */}
        </View>
        {
   this.state.loader?
@@ -287,6 +307,26 @@ Keyboard.dismiss();
           
         />
          
+         <View style={{flexDirection:'row',alignSelf:'center',justifyContent:'space-evenly',width:'100%',marginVertical:10}}>
+           <TouchableOpacity onPress={()=>this.changeTermsCond('kitchen')} style={{flexDirection:'row'}}>
+                <Icon2 name={(this.state.termsAgreed == 'kitchen') ? 'check-square-o' : 'square-o'} size={30} style={{ marginHorizontal:10,
+      color:color.searchBorder}}/>
+       <Text style={{fontFamily:string.fontLatoMed,fontSize:hp('2.5%'),marginLeft:10}}>Kitchen</Text>
+                </TouchableOpacity>
+              
+              
+               
+                <TouchableOpacity onPress={()=>this.changeTermsCond('normal')} style={{flexDirection:'row'}}>
+                <Icon2 name={(this.state.termsAgreed == 'normal') ? 'check-square-o' : 'square-o'} size={30} style={{ marginHorizontal:10,
+      color:color.searchBorder}}/>
+       <Text style={{fontFamily:string.fontLatoMed,fontSize:hp('2.5%'),marginLeft:10}}>Normal</Text>
+                </TouchableOpacity>
+               
+                   
+                </View>
+
+
+
            {
           this.state.loading?
           <View style={baseStyle.loadingStyle}>
@@ -314,7 +354,7 @@ Keyboard.dismiss();
        width={widths.nintyper}
        dialogTitle={<DialogTitle textStyle={{color: color.primaryColor,fontSize: heights.dp12, fontFamily: string.fontLato}} title="Select Restuarants" />}
        footer={
-        <DialogFooter> 
+        <DialogFooter style={{backgroundColor:color.white}}> 
           <DialogButton
           text="Cancel"
           textStyle={{color: color.black,fontSize: widths.by25, fontFamily: string.fontLatoMed}}
@@ -333,7 +373,7 @@ Keyboard.dismiss();
          this.setState({ restDialog: false });
         }}
      >
-       <DialogContent>
+       <DialogContent style={{backgroundColor:color.white}}>
       <FlatList
        data={this.state.restArray}
        ItemSeparatorComponent={this.renderSeparator}
@@ -364,7 +404,7 @@ const styles=StyleSheet.create({
     SecondContainer: {
         flex:1,
         width:'100%',
-        marginTop:50,
+        marginTop:20,
         marginHorizontal:10,
         position:'relative',
         alignSelf:'center',

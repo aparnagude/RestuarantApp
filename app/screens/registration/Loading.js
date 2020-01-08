@@ -14,7 +14,21 @@ export default class Loading extends React.Component {
      
 
         const userToken = await AsyncStorage.getItem('userToken');
+        const user = await AsyncStorage.getItem('user');
+  const userdet=JSON.parse(user);
+  if(user==null){
+    this.props.navigation.navigate(userToken ? 'Home' : 'Login');
+  }
+  else{
+    if(userdet.userType=='kitchen'){
+        this.props.navigation.navigate(userToken ? 'KitchenOrders' : 'Login');
+      }
+      else{
         this.props.navigation.navigate(userToken ? 'Home' : 'Login');
+      }
+  }
+
+       
     }
 
     render() {

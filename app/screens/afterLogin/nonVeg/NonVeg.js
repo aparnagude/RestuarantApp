@@ -34,12 +34,12 @@ constructor(props){
         ],
         bottomList: [
             {
-              id: 'Veg',
+              id: 'Vegetarian',
               name: 'VEG',
               image:require('../../../assets/veg.png')
             },
             {
-              id: 'NonVeg',
+              id: 'Non Vegetarian',
               name: 'NONVEG',
               image:require('../../../assets/non_Veg.png')
             },
@@ -65,6 +65,7 @@ constructor(props){
           btprice:[],
           totalprice:0,
           restDialog:false,
+          itemName:''
          
     }
 }
@@ -81,19 +82,26 @@ async componentWillMount(){
   const userToken = await AsyncStorage.getItem('auth');
   const user = await AsyncStorage.getItem('user');
   const userdet=JSON.parse(user);
-  console.warn(userdet.userId);
-  this.setState({token:userToken,userId:userdet.userId,itemType:this.props.navigation.state.params.itemType});
-  this.allDishes();
+  console.warn(userToken);
+  this.setState({token:userToken,userId:userdet.userId,itemType:'VEG',itemName:'Vegetarian'});
+  setTimeout(() => {
+    this.allDishes();
+  }, 500);
+
 
   }
 
-  selectVilage = (item) => {
+  selectVilage = (item,id) => {
     // alert(item);
      this.setState({
        restDialog: false,
-       itemType:item
+       itemType:item,
+       itemName:id
        });
-       this.allDishes();
+       setTimeout(() => {
+        this.allDishes();
+       }, 500);
+       
  }
 allDishes = ()  => {
      
@@ -114,7 +122,8 @@ allDishes = ()  => {
       'Authorization':_this.state.token,
       'userId':_this.state.userId
      }
-   }).then( function(response) {
+   }).then(function(response) {
+     console.warn(_this.state.token);
        _this.setState({loading:false});
     if (response.status == 200) {
      
@@ -271,7 +280,7 @@ allDishes = ()  => {
                  "counter":this.state.counter[i],
                  "totalAmount":this.state.totalprice,
                  "price":this.state.ItemList[i].price,
-                
+                 "image":this.state.ItemList[i].image,
            
                  
                  }
@@ -320,7 +329,7 @@ render(){
                 <TouchableOpacity style={{alignSelf:'flex-end'}} onPress={()=>this.props.navigation.goBack(null)}>   
                          <Icon4 name='md-arrow-back' size={25} style={{alignSelf:'center',color:color.black}} />
                     </TouchableOpacity>
-                    <Text style={{fontFamily:string.fontLatoMed,fontSize:hp('3%'),alignSelf:'center'}}>Vegetarian</Text>
+    <Text style={{fontFamily:string.fontLatoMed,fontSize:hp('3%'),alignSelf:'center'}}>{this.state.itemName}</Text>
                     <TouchableOpacity style={{alignSelf:'flex-end'}} onPress={()=>this.setState({restDialog:true})}>   
                          <Icon3 name='dots-three-vertical' size={25} style={{alignSelf:'center',color:color.black}} />
                     </TouchableOpacity>
@@ -358,34 +367,48 @@ render(){
                      <Text style={{color:color.linecolor,fontFamily:string.fontLato,fontSize:18,alignSelf:'center',justifyContent:'center',marginTop:heights.by2half}}>Items not available</Text>
 
                      :
-               <ScrollView style={{marginBottom:30,}}>
+               <ScrollView style={{marginBottom:50,}}>
+                   <View style={styles.secondContainer}>
                    
-                <Text style={styles.headingText}>RECOMMENDED DISHES</Text>
-                <FlatList
-                    data={this.state.ItemList}
-                    olumnWrapperStyle={styles.row}
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={this.state.visible==true?{marginBottom:30}:{marginBottom:0}}
-                    numColumns={2}
-                    renderItem={({ item,index }) => 
-                    <View style={styles.cardContainer2}>
-                        <ImageBackground style={styles.Background} source={require('../../../assets/food_image.jpg')}>
-                        <View style={styles.overlay} /> 
-                        </ImageBackground>
-                        <View style={styles.columnContainer}>
-                <Text style={styles.name} numberOfLines={2}>{item.itemName}</Text>
-                <View style={styles.rowContainer}>
-                <Text style={{fontFamily:string.fontLatoSemi,fontSize:14,color:color.primaryColor,}}>{'\u20B9'+item.price}</Text>
               
-                {
+
+<FlatList
+        data={this.state.ItemList}
+      //  columnWrapperStyle={styles.row}
+        showsHorizontalScrollIndicator={false}
+        
+        contentContainerStyle={this.state.visible==true?{marginBottom:50}:{marginBottom:0}}
+       numColumns={2}
+        renderItem={({ item,index }) => 
+
+
+        <View style={{marginHorizontal:4,marginVertical:4,flexDirection:'column'}}>
+                  
+                  <View style={{position:'absolute',top:10,elevation:3,width:wp('40%'),height:hp('15%'),borderRadius:5,alignSelf:'center'}}>
+                  {
+                   item.image==null?
+                
+             <Image style={{width:wp('40%'),height:hp('15%'),borderRadius:10}} source={require('../../../assets/food_image.jpg')}/>
+                 :
+               <Image style={{width:wp('40%'),height:hp('15%'),borderRadius:10}} source={{uri:item.image+""}}/>
+
+                }    
+                  </View>
+                   <View style={{ width: wp('45%'),height: hp('18%'),elevation:2,marginTop:heights.by10,borderRadius:10,backgroundColor:color.white}}>
+                  <View style={{flexDirection:'column',marginTop:widths.by10,}}>
+                   <Text style={{fontFamily:string.fontLatoSemi,fontSize:hp('2.5%'),color:color.black,alignSelf:'flex-start',marginTop:10,marginHorizontal:10}} numberOfLines={2}>{item.itemName}</Text>
+                   <View style={styles.rowContainer}>
+
+         {
                       this.state.counter[index]==0?
-                     <TouchableOpacity 
-                   style={{backgroundColor:color.primaryColor,padding:5,alignSelf:'center', borderRadius:2,  }}
-                   onPress={()=>this.incrementFunc(index,item.price)}>
-                    <Text style={{fontFamily:string.fontLatoSemi,fontSize:14,color:color.white,alignSelf:'center',paddingHorizontal:10}}>ADD </Text>
-                   </TouchableOpacity>
+
+                      <TouchableOpacity style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,width:wp('17%')}}
+                      onPress={()=>this.incrementFunc(index,item.price)}>
+                      <Text style={{fontFamily:string.fontLatoSemi,fontSize:hp('2%'),color:color.white,alignSelf:'center',paddingHorizontal:10}}>ADD</Text>
+                  </TouchableOpacity>
+                  
                    :
-                   <View style={{backgroundColor:color.primaryColor,padding:5,alignSelf:'center', borderRadius:2,
+                   <View style={{backgroundColor:color.primaryColor,borderRadius:5,padding:5,width:wp('21%'),
                     flexDirection:'row',justifyContent:'space-between'}}>
                    <TouchableOpacity onPress={()=>this.decrementFunc(index,item.price)}> 
                   <Icon3 name="minus" size={20} color={color.white} /> 
@@ -396,20 +419,27 @@ render(){
                   <Icon3 name="plus" size={20} color={color.white} />
                   </TouchableOpacity>
 
-              
+
                   </View>
                    }
-              
-              
-           
-            
-                </View>
-                </View>
-                    </View>
-       
+
+
+        
+  <Text style={{fontFamily:string.fontLatoSemi,fontSize: hp('2.5%') ,color:color.black,}}>{'\u20B9'+item.price}</Text>
+     
+       </View>
+       </View>
+           </View>
+        </View>
+
+
+
+
+
     }
         keyExtractor={item => item.id}
       />
+      </View>
                </ScrollView>
   }
                </View>
@@ -445,7 +475,7 @@ flex:3}}>
                 <Icon2 name="grid" size={25} color={color.white} style={{padding:10,marginBottom:5,}}/>
 						</TouchableOpacity>
             <TouchableOpacity style={[styles.buttonConatiner,{backgroundColor:color.white} ]} 
-                        onPress={() => this.navigatetoScreen('CartListScreen')}>
+                        onPress={()=>this.nextScreen()}>
                 <Icon name="cart" size={35} color={color.primary} style={{padding:10,marginBottom:5,}}/>
 						</TouchableOpacity>
             <TouchableOpacity style={[styles.buttonConatiner,{backgroundColor:color.white} ]}
@@ -464,9 +494,9 @@ flex:3}}>
                 <Dialog
        visible={this.state.restDialog}
        width={widths.nintyper}
-       dialogTitle={<DialogTitle textStyle={{color: color.primaryColor,fontSize: heights.dp12, fontFamily: string.fontLato}} title="Select Item Type" />}
+       dialogTitle={<DialogTitle textStyle={{color: color.primaryColor,fontSize: heights.dp12, fontFamily: string.fontLato,backgroundColor:color.white}} title="Select Item Type" />}
        footer={
-        <DialogFooter> 
+        <DialogFooter style={{backgroundColor:color.white}}> 
           <DialogButton
           text="Cancel"
           textStyle={{color: color.black,fontSize: widths.by25, fontFamily: string.fontLatoMed}}
@@ -485,12 +515,12 @@ flex:3}}>
          this.setState({ restDialog: false });
         }}
      >
-       <DialogContent>
+       <DialogContent style={{backgroundColor:color.white}}>
       <FlatList
        data={this.state.bottomList}
        ItemSeparatorComponent={this.renderSeparator}
        renderItem={({ item }) => (
-   <TouchableOpacity key={`${item.id}`} onPress={() => this.selectVilage(item.name)} style={{padding:10}}>
+   <TouchableOpacity key={`${item.id}`} onPress={() => this.selectVilage(item.name,item.id)} style={{padding:10}}>
    
         <Text style={{fontSize:16, color: color.primary, fontFamily: string.fontLatoMed}}>{`${item.name}`}</Text>
        
@@ -527,6 +557,12 @@ buttonConatiner:{
   
  
 },
+secondContainer:{
+  flex:1,
+  alignItems:'center',
+  marginVertical:10,
+  paddingBottom:20
+},
 topbarContainer:{
     position:'absolute',
     top:0,
@@ -555,7 +591,8 @@ rowConatiner:{
 rowContainer:{
   flexDirection:'row',
   justifyContent:'space-between',
-  marginVertical:10
+  marginVertical:10,
+  marginHorizontal:10
 },
 rowContainer3:{
     flexDirection:'row',

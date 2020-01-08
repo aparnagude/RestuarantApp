@@ -1,7 +1,7 @@
 import {createAppContainer,createSwitchNavigator,DrawerActions } from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
  import { createDrawerNavigator } from 'react-navigation-drawer';
-import {View,Text,StyleSheet,Platform,TouchableOpacity,Image,StatusBar,BackAndroid,} from 'react-native';
+import {View,Text,StyleSheet,Platform,TouchableOpacity,Image,StatusBar,BackHandler,} from 'react-native';
 import Login from '../screens/registration/Login';
 import Home from '../screens/afterLogin/Home';
 import Loading from '../screens/registration/Loading';
@@ -18,7 +18,9 @@ import Filter from '../screens/afterLogin/Filter';
 import EditProfile from '../screens/afterLogin/Profile/EditProfile';
 import CartListScreen from '../screens/afterLogin/Cart/CartListScreen';
 import MyOrders from '../screens/afterLogin/myOrders/MyOrders';
+import KitchenOrders from '../screens/kitchenHome/KitchenOrders';
 import React, {Component} from 'react';
+import AsyncStorage from '@react-native-community/async-storage'
 import { widths,heights } from '../design/dimen';
 import { existsTypeAnnotation } from '@babel/types';
 
@@ -62,10 +64,57 @@ class RightButton extends Component {
 
 const FirstActivity_StackNavigator = createStackNavigator({
   //All the screen from the Screen1 will be indexed here
+  KitchenOrders: {
+    screen: KitchenOrders,
+    navigationOptions: ({ navigation }) => ({
+      title: 'My Orders',
+    //  headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+     
+      headerStyle: {
+        backgroundColor: color.white,
+        elevation:0
+      },
+      headerTitleStyle: {
+        fontFamily: string.fontLato,
+        letterSpacing: 0.2,
+        fontWeight: '100',
+      },
+      headerTintColor: color.black,
+      headerRight: (
+       
+          
+        <TouchableOpacity onPress={()=>{
+          AsyncStorage.clear();
+       navigation.navigate('Login');}}  
+        style={{marginRight:20,alignSelf:'center',marginTop:5,width:30,height:30}}>
+        <Icon 
+        name='logout'
+        size={22}
+        color={color.black}
+         
+        
+        />
+        </TouchableOpacity>
+       
+      ),
+    }),
+  },
   Home: {
     screen: Home,
     navigationOptions: ({ navigation }) => ({
       title: 'Home',
+      headerLeft: (
+        <TouchableOpacity onPress={()=>BackHandler.exitApp()}  
+        style={{marginLeft:20,alignSelf:'center',marginTop:10,width:30,height:30}}>
+        <Icon 
+        name='close'
+        size={25}
+        color={color.black}
+         
+        
+        />
+        </TouchableOpacity>
+      ),
     //  headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
      
       headerStyle: {
@@ -81,6 +130,7 @@ const FirstActivity_StackNavigator = createStackNavigator({
       
     }),
   },
+
   Profile:{
     screen:Profile,
     navigationOptions: ({ navigation }) => ({
@@ -162,6 +212,34 @@ const FirstActivity_StackNavigator = createStackNavigator({
               fontWeight: '100',
             },
       headerTintColor: color.black,
+      headerRight: (
+        <View style={{flexDirection:'row'}}>
+           <TouchableOpacity onPress={()=>{
+         
+       navigation.navigate('MyOrders');}}  
+        style={{marginRight:20,alignSelf:'center',width:30,height:30}}>
+        <Icon 
+        name='idcard'
+        size={29}
+        color={color.black}
+         
+        
+        />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={()=>{
+          AsyncStorage.clear();
+       navigation.navigate('Login');}}  
+        style={{marginRight:20,alignSelf:'center',marginTop:5,width:30,height:30}}>
+        <Icon 
+        name='logout'
+        size={22}
+        color={color.black}
+         
+        
+        />
+        </TouchableOpacity>
+        </View>
+      ),
     }),
   },
   CartListScreen:{

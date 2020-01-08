@@ -7,17 +7,17 @@ import { DrawerActions } from 'react-navigation-drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
 import Icon3 from 'react-native-vector-icons/Entypo'
-import string from '../../../design/strings';
-import color from '../../../design/colors';
+import string from '../../design/strings';
+import color from '../../design/colors';
 import AsyncStorage from '@react-native-community/async-storage';
-import window, { heights, widths } from '../../../design/dimen';
-import baseStyle from '../../../design/styles';
-import BottomBar from '../../../components/BootomBar';
-import serverConfig from '../../../config/serverConfig';
-import ExpandableKitComponent from './ExpandableKitComponent'
+import window, { heights, widths } from '../../design/dimen';
+import baseStyle from '../../design/styles';
+import BottomBar from '../../components/BootomBar';
+import serverConfig from '../../config/serverConfig';
+import ExpandableKitComponent from './../afterLogin/myOrders/ExpandableKitComponent'
 
 
-class MyOrders extends Component {
+class KitchenOrders extends Component {
 constructor(props){
 
     super(props);
@@ -180,7 +180,7 @@ render(){
 }
 }
 
-export default MyOrders;
+export default KitchenOrders;
 
 const styles=StyleSheet.create({
     MainContainer:{

@@ -217,7 +217,7 @@ this.state.loader?
 
 :
       
-          <ScrollView contentContainerStyle={{paddingBottom:60}}>
+          <ScrollView contentContainerStyle={{paddingBottom:50}}>
 
              <View style={{backgroundColor:color.white,width:'100%',height:100,justifyContent:'center',marginTop:20}}>
                   <TouchableOpacity style={styles.avatar}>
@@ -264,12 +264,13 @@ this.state.loader?
           
         />
           </View>
-          <View style={[styles.SecondContainer,{marginBottom:10,paddingBottom:0}]}>
+          {/* <View style={[styles.SecondContainer,{marginBottom:10,paddingBottom:0}]}>
           <Text onPress={()=>this._bootstrap()} style={{fontSize:hp('2.5%'),fontFamily:string.fontLatoMed,paddingHorizontal:10,paddingVertical:5}}>Logout</Text>
+          <View  style={{backgroundColor:color.linecolor,height:1,marginHorizontal:10}}/>
           <Text onPress={()=>this.props.navigation.navigate('MyOrders')} style={{fontSize:hp('2.5%'),fontFamily:string.fontLatoMed,paddingHorizontal:10,paddingVertical:5}}>My Orders</Text>
 
 
-          </View>
+          </View> */}
             {
           this.state.loading?
           <View style={baseStyle.loadingStyle}>
@@ -318,14 +319,12 @@ const styles=StyleSheet.create({
        
     SecondContainer: {
         flex:1,
-        width:'90%',
+        width:'100%',
        
         marginHorizontal:10,
         position:'relative',
         alignSelf:'center',
-        marginBottom:20,
-        elevation:3,
-        borderRadius:5,
+       
         paddingBottom:20,
         
     },
